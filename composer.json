@@ -1,0 +1,52 @@
+{
+    "name": "emedia/oxygen-push-notifications",
+    "description": "Individual and group push notification library for Oxygen.",
+    "type": "library",
+    "repositories": [
+        {
+            "type":"vcs",
+            "url":"git@bitbucket.org:elegantmedia/formation.git"
+        },
+        {
+            "type":"vcs",
+            "url":"git@bitbucket.org:elegantmedia/quickdata-laravel.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@bitbucket.org:elegantmedia/laravel-helpers.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@bitbucket.org:elegantmedia/php-helpers.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@bitbucket.org:elegantmedia/devices-laravel.git"
+        }
+    ],
+    "require": {
+        "php": "^7.0",
+        "illuminate/support": "^5.7",
+        "illuminate/database": "^5.7",
+        "emedia/quick-data-laravel": "~2.0",
+        "emedia/formation": "~0.0",
+        "kreait/firebase-php": "^4.19",
+        "illuminate/notifications": "^5.7",
+        "emedia/devices-laravel": "^1.0"
+    },
+    "license": "proprietary",
+    "autoload": {
+        "psr-4": {
+            "EMedia\\OxygenPushNotifications\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "EMedia\\OxygenPushNotifications\\OxygenPushNotificationsServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
