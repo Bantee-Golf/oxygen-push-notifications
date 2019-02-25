@@ -13,6 +13,9 @@ This package allows you to:
 - Unsubscribe devices from topics.
 - Scheduled notifications to be sent out at a later date and time.
 
+![Webp.net-resizeimage.png](https://bitbucket.org/repo/9prpM9o/images/1056976072-Webp.net-resizeimage.png)
+
+
 ### Send Push Notifications
 
 All notifications are stored in the database and can be processed later as a queue. Notifications can be assigned to a User, Device or a Topic.
