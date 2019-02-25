@@ -12,6 +12,7 @@ This package allows you to:
 - Subscribe devices to topics.
 - Unsubscribe devices from topics.
 - Scheduled notifications to be sent out at a later date and time.
+- Allow admin to create and manage notifications from Dashboard.
 
 ![Webp.net-resizeimage.png](https://bitbucket.org/repo/9prpM9o/images/1056976072-Webp.net-resizeimage.png)
 
@@ -128,7 +129,7 @@ php artisan oxygen:push-notifications-subscribe-devices --topic=android_devices
 ```
 
 
-### Installation
+## Installation
 
 Update your `composer.json` and add these repositories.
 
@@ -167,7 +168,7 @@ Install the package
 composer require emedia/oxygen-push-notifications
 ```
 
-### Setup
+## Setup
 
 ##### STEP 1. Setup the Package
 
