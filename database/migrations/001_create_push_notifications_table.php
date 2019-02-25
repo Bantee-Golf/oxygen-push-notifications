@@ -22,6 +22,8 @@ class CreatePushNotificationsTable extends \Illuminate\Database\Migrations\Migra
 			$table->dateTime('read_at')->nullable();
 			$table->nullableMorphs('notifiable');
 			$table->string('topic')->nullable();
+			$table->text('apns_config')->nullable();
+			$table->text('android_config')->nullable();
 			$table->softDeletes();
 			$table->timestamps();
 		});

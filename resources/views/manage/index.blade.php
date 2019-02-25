@@ -35,9 +35,17 @@
                 <strong>{{ $item->title }}</strong>
                 <div>{{ $item->message }}</div>
                 @if ($item->topic)
-                    <div class="badge badge-info">{{ strtoupper($item->topic) }}</div>
+                    <div class="badge badge-info">{{ $item->topic_display_name }}</div>
+                @elseif ($item->notifiable)
+                    @if ($item->notifiable instanceof \App\User)
+                        <div class="badge badge-info">{{ $item->notifiable->full_name }}</div>
+                    @elseif ($item->notifiable instanceof \EMedia\Devices\Entities\Devices\Device)
+                        <div class="badge badge-info">{{ strtoupper($item->device_type) }} DEVICE</div>
+                    @else
+                        <div class="badge badge-danger">Unknown Receiver</div>
+                    @endif
                 @else
-                    <div class="badge badge-danger">No Audience</div>
+                    <div class="badge badge-danger">Unknown Receiver</div>
                 @endif
             </td>
             <td>
@@ -54,6 +62,8 @@
             <td>
                 @if ($item->sent_at)
                     {{ standard_datetime($item->sent_at) }}
+                @else
+                    <span class="badge badge-warning">PENDING</span>
                 @endif
             </td>
             <td class="text-right">
@@ -62,6 +72,16 @@
                         <a href="{{ entity_resource_path() . '/' . $item->id . '/edit' }}"
                            class="btn btn-warning js-tooltip"
                            title="Edit"><em class="fa fa-edit"></em> Edit</a>
+
+                        @if (isset($isDestroyingEntityAllowed) && $isDestroyingEntityAllowed === true)
+                            <form action="{{ entity_resource_path() . '/' . $item->id }}"
+                                  method="POST" class="form form-inline js-confirm">
+                                {{ method_field('delete') }}
+                                {{ csrf_field() }}
+                                <button class="btn btn-danger js-tooltip"
+                                        title="Delete"><em class="fa fa-times"></em> Delete</button>
+                            </form>
+                        @endif
                     @endif
 
                     {{--
@@ -80,15 +100,7 @@
                     </form>
                     --}}
 
-                    @if (isset($isDestroyingEntityAllowed) && $isDestroyingEntityAllowed === true)
-                        <form action="{{ entity_resource_path() . '/' . $item->id }}"
-                              method="POST" class="form form-inline js-confirm">
-                            {{ method_field('delete') }}
-                            {{ csrf_field() }}
-                            <button class="btn btn-danger js-tooltip"
-                                    title="Delete"><em class="fa fa-times"></em> Delete</button>
-                        </form>
-                    @endif
+
 
                 </div>
             </td>

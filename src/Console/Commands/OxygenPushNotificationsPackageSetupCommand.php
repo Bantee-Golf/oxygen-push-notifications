@@ -27,6 +27,8 @@ class OxygenPushNotificationsPackageSetupCommand extends BasePackageSetupCommand
 	protected function generateMigrations()
 	{
 		$this->copyMigrationFile(__DIR__, '001_create_push_notifications_table.php', \CreatePushNotificationsTable::class);
+
+		$this->copyMigrationFile(__DIR__, '002_add_topic_subscriptions_to_devices_table.php', \AddTopicSubscriptionsToDevicesTable::class);
 	}
 
 	protected function generateSeeds()

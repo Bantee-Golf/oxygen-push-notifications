@@ -9,6 +9,10 @@ use App\Entities\PushNotifications\PushNotificationsRepository;
 use App\Http\Controllers\Controller;
 
 use EMedia\Oxygen\Http\Controllers\Traits\HasHttpCRUD;
+use EMedia\OxygenPushNotifications\Domain\PushNotificationManager;
+use EMedia\OxygenPushNotifications\Domain\PushNotificationTopic;
+use EMedia\OxygenPushNotifications\Exceptions\UnknownRecepientException;
+use Illuminate\Http\Request;
 
 class PushNotificationsController extends Controller
 {
@@ -34,6 +38,31 @@ class PushNotificationsController extends Controller
 	protected function indexViewName()
 	{
 		return 'oxygen-push-notifications::manage.index';
+	}
+
+	/**
+	 * @param Request $request
+	 * @param null    $id
+	 *
+	 * @return mixed
+	 * @throws UnknownRecepientException
+	 */
+	protected function storeOrUpdateRequest(Request $request, $id = null)
+	{
+		if (empty($this->indexRouteName()))
+			throw new \InvalidArgumentException("'indexRouteName()' returns an empty value.");
+
+		$this->validate($request, $this->model->getRules());
+
+		/** @var PushNotification $entity */
+		$entity = $this->dataRepo->fillFromRequest($request, $id);
+
+		// send push notification
+		if (env('OXYGEN_PUSH_NOTIFICATIONS_SANDBOX', false)) {
+			PushNotificationManager::sendStoredPushNotification($entity);
+		}
+
+		return redirect()->route($this->indexRouteName());
 	}
 
 }

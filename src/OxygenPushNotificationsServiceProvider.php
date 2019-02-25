@@ -4,6 +4,8 @@
 namespace EMedia\OxygenPushNotifications;
 
 
+use EMedia\OxygenPushNotifications\Console\Commands\SendPushNotificationsQueueCommand;
+use EMedia\OxygenPushNotifications\Console\Commands\SubscribeDevicesToTopic;
 use EMedia\OxygenPushNotifications\Console\Commands\OxygenPushNotificationsPackageSetupCommand;
 use Illuminate\Support\ServiceProvider;
 
@@ -26,6 +28,9 @@ class OxygenPushNotificationsServiceProvider extends ServiceProvider
 		if (!app()->environment('production')) {
 			$this->commands(OxygenPushNotificationsPackageSetupCommand::class);
 		}
+
+		$this->commands(SubscribeDevicesToTopic::class);
+		$this->commands(SendPushNotificationsQueueCommand::class);
 	}
 
 }

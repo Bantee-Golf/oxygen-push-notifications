@@ -3,15 +3,28 @@
 namespace EMedia\OxygenPushNotifications\Entities\PushNotifications;
 
 
+use Illuminate\Database\Eloquent\Model;
+use Kreait\Firebase\Messaging\Notification;
+
 interface PushNotificationInterface
 {
 
 	/**
 	 *
-	 * Return push notification data as an array
+	 * Return the Cloud Notification Object
 	 *
-	 * @return array
+	 * @return Notification
 	 */
-	public function getPushNotificationData();
+	public function getCloudNotification();
+
+	/**
+	 *
+	 * Allow updating the sent timestamp
+	 *
+	 * @param null $model
+	 *
+	 * @return mixed
+	 */
+	public function touchSentTimestamp($updateTimestamp = true);
 
 }

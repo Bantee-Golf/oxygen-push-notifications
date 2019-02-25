@@ -9,6 +9,7 @@ use EMedia\OxygenPushNotifications\Domain\PushNotificationTopic;
 use Illuminate\Database\Eloquent\Model;
 use EMedia\QuickData\Entities\Traits\RelationshipDataTrait;
 use EMedia\QuickData\Entities\Search\SearchableTrait;
+use Kreait\Firebase\Messaging\Notification;
 
 class PushNotification extends Model implements PushNotificationInterface
 {
@@ -24,7 +25,6 @@ class PushNotification extends Model implements PushNotificationInterface
 		'read_at',
 		'scheduled_at',
 		'scheduled_timezone',
-		'sent_at',
 		'topic',
 	];
 
@@ -36,13 +36,22 @@ class PushNotification extends Model implements PushNotificationInterface
 	protected $editable = [
 		[
 			'name' => 'title',
-			// 'type' => 'textarea',
-			'placeholder' => 'Maximum 250 characters',
+			'placeholder' => 'Maximum 100 characters',
+			'attributes' => [
+				'required' => true,
+				'minlength' => 10,
+				'maxlength' => 100,
+			]
 		],
 		[
 			'name' => 'message',
-			// 'type' => 'textarea',
-			'placeholder' => 'Maximum 250 characters',
+			'type' => 'textarea',
+			'placeholder' => 'Maximum 500 characters',
+			'attributes' => [
+				'required' => true,
+				'minlength' => 10,
+				'maxlength' => 500,
+			]
 		],
 		[
 			'name' => 'topic',
@@ -53,8 +62,11 @@ class PushNotification extends Model implements PushNotificationInterface
 				PushNotificationTopic::TOPIC_ALL_DEVICES 	 => 'All Devices',
 				PushNotificationTopic::TOPIC_IOS_DEVICES 	 => 'All iOS Devices',
 				PushNotificationTopic::TOPIC_ANDROID_DEVICES => 'All Android Devices',
+			],
+			'attributes' => [
+				'required' => true,
 			]
-		]
+		],
 	];
 
 	protected $dates = [
@@ -64,7 +76,7 @@ class PushNotification extends Model implements PushNotificationInterface
 	];
 
 	protected $rules = [
-		'title' => 'required|min:10|max:500',
+		'title' => 'required|min:10|max:100',
 		'message' => 'required|min:10|max:500',
 		'topic' => 'required',
 	];
@@ -88,11 +100,110 @@ class PushNotification extends Model implements PushNotificationInterface
 		return $this->morphTo('notifiable');
 	}
 
-	public function getPushNotificationData()
+	/**
+	 *
+	 * Return a Cloud Notification Object
+	 *
+	 * @return Notification
+	 */
+	public function getCloudNotification()
 	{
-		return [
+		return Notification::fromArray([
 			'title' => $this->title,
-			'content' => $this->message,
-		];
+			'body' => $this->message,
+		]);
+	}
+
+	/**
+	 *
+	 * Return APNS Config
+	 *
+	 * @return array
+	 */
+	public function getApnsConfigAttribute()
+	{
+		if (empty($this->apns_config)) return [];
+
+		try {
+			return json_decode($this->apns_config, true);
+		} catch (\Exception $ex) {
+			//
+		}
+
+		return [];
+	}
+
+	/**
+	 *
+	 * Return Android Config
+	 *
+	 * @return array
+	 */
+	public function getAndroidConfigAttribute()
+	{
+		if (empty($this->apns_config)) return [];
+
+		try {
+			return json_decode($this->android_config, true);
+		} catch (\Exception $ex) {
+			//
+		}
+
+		return [];
+	}
+
+	/**
+	 *
+	 * Return Data
+	 *
+	 * @return array
+	 */
+	public function getDataAttribute()
+	{
+		if (empty($this->apns_config)) return [];
+
+		try {
+			return json_decode($this->data, true);
+		} catch (\Exception $ex) {
+			//
+		}
+
+		return [];
+	}
+
+	public function setDataConfigAttribute($value)
+	{
+		$this->attributes['data'] = json_encode($value);
+	}
+
+	public function setApnsConfigAttribute($value)
+	{
+		$this->attributes['apns_config'] = json_encode($value);
+	}
+
+	public function setAndroidConfigAttribute($value)
+	{
+		$this->attributes['android_config'] = json_encode($value);
+	}
+
+	public function getTopicDisplayNameAttribute()
+	{
+		return str_replace('_', ' ', strtoupper($this->topic));
+	}
+
+	/**
+	 *
+	 * Allow updating the sent timestamp
+	 *
+	 * @param null $model
+	 *
+	 * @return void
+	 */
+	public function touchSentTimestamp($updateTimestamp = true)
+	{
+		if ($updateTimestamp) {
+			$this->sent_at = now();
+			$this->save();
+		}
 	}
 }
