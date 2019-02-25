@@ -45,7 +45,8 @@ $push->notifiable()->associate($user);
 $push->save();
 
 // Send the notification.
-// When the line below is called, the notification is sent immidiately to the recipient. The scheduled time will be ignored. If you need to send at a schedule, see the command below.
+// When the line below is called, the notification is sent immidiately to the recipient. 
+// The scheduled time will be ignored. If you need to send at a schedule, see the artisan command below.
 PushNotificationManager::sendStoredPushNotification($push);
 ```
 
@@ -116,13 +117,13 @@ PushNotificationManager::unsubscribeDevicesFromTopic($devices, $topicName);
 If you already have devices stored in the database, the devices can be bulk subscribed to topics. To subscribe devices, call the following artisan command.
 
 ```
-// subsribe all devices
+// Subscribe all devices
 php artisan oxygen:push-notifications-subscribe-devices --topic=all_devices
 
-// subsribe iOS devices
+// Subscribe iOS devices
 php artisan oxygen:push-notifications-subscribe-devices --topic=ios_devices
 
-// subsribe Android devices
+// Subscribe Android devices
 php artisan oxygen:push-notifications-subscribe-devices --topic=android_devices
 ```
 
