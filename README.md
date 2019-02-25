@@ -166,21 +166,29 @@ Install the package
 composer require emedia/oxygen-push-notifications
 ```
 
-Add Menu Item to Oxygen (Optional)
+### Setup
 
-On `sidebar.blade.php`, add the menu item. 
+##### STEP 1. Setup the Package
+
+Run the setup command for this package
+```
+php artisan setup:package:oxygen-push-notifications
+```
+
+Add Menu Item to Oxygen on `sidebar.blade.php`, add the menu item. 
 
 ```
 <li><a href="{{ route('manage.push-notifications.index') }}"><i class="fas fa-comment"></i> Push Notifications</a></li>
 ```
 
-### Setup
+If required, add the add the seeder file manually to `DatabaseSeeder.php`
+
+
+##### STEP 2. Create a Service Account
 
 This package uses [Firebase Admin SDK](https://firebase-php.readthedocs.io/en/stable/) to connect to Firebase Cloud Messaging.
 
 For authentication, you must use a Google Service Account. [Check their documentation](https://firebase-php.readthedocs.io/en/stable/setup.html) for latest instructions. They are repeated here for easier reference.
-
-##### STEP 1. Create a Service Account
 
 1. Login to [Firebase Console](https://console.firebase.google.com/) and select your project.
 1. Go to `Project Settings` > `Service Accounts` > `Firebase Admin SDK` > `Manage all service accounts`
@@ -188,7 +196,7 @@ For authentication, you must use a Google Service Account. [Check their document
 1. Give the permissions as a `Project > Editor`.
 1. Create a new key, and download the `json` file.
 
-##### STEP 2. Link the key to project
+##### STEP 3. Link the key to project
 
 1. Store the key file in `storage/keys` or a similar location.
 1. Add the file path to `.gitignore` file.
