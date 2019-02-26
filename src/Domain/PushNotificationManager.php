@@ -214,6 +214,9 @@ class PushNotificationManager
 
 		$successCount = $failedCount = 0;
 
+		$query->whereNotNull('device_push_token');
+		$query->where('device_push_token', '!=', '');
+
 		while ($processedRecordCount < $count) {
 			$successDevices = new Collection();
 			$failedDevices  = new Collection();
