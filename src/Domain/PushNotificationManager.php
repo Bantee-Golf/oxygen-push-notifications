@@ -284,6 +284,9 @@ class PushNotificationManager
 	{
 		$isResponseSuccessful = true;
 
+		// don't go further if there's no token
+		if (empty($device->device_push_token)) return false;
+
 		// don't subscribe if already subscribed
 		if ($force || !$device->is_subscribed_to_all_devices_topic) {
 			$response = self::subscribeDeviceToTopic($device, PushNotificationTopic::TOPIC_ALL_DEVICES);
