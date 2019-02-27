@@ -399,8 +399,7 @@ class PushNotificationManager
 		if ((is_array($response) &&
 				isset($response['results']) &&
 				is_array($response['results']) &&
-				count($response['results']) &&
-				$response['results'][0]) &&
+				isset($response['results'][0])) &&
 			!isset($response['results'][0]['error'])) {
 			return true;
 		}
