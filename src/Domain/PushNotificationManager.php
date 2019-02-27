@@ -301,19 +301,17 @@ class PushNotificationManager
 
 		// don't subscribe if already subscribed
 		if ($force || !$device->is_subscribed_to_device_type_topic) {
-			$response2 = null;
+			$response2Successful = null;
 			if ($device->device_type === 'apple') {
-				$response2 = self::subscribeDeviceToTopic($device, PushNotificationTopic::TOPIC_IOS_DEVICES);
+				$response2Successful = self::subscribeDeviceToTopic($device, PushNotificationTopic::TOPIC_IOS_DEVICES);
 			} elseif ($device->device_type === 'android') {
-				$response2 = self::subscribeDeviceToTopic($device, PushNotificationTopic::TOPIC_ANDROID_DEVICES);
+				$response2Successful = self::subscribeDeviceToTopic($device, PushNotificationTopic::TOPIC_ANDROID_DEVICES);
 			}
 
-			if ($response2) {
-				if (self::isResponseSuccessful($response2)) {
-					$device->is_subscribed_to_device_type_topic = true;
-				} else {
-					$isResponseSuccessful = false;
-				}
+			if ($response2Successful) {
+				$device->is_subscribed_to_device_type_topic = true;
+			} else {
+				$isResponseSuccessful = false;
 			}
 		}
 
