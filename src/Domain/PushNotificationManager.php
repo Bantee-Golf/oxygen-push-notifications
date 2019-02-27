@@ -292,8 +292,7 @@ class PushNotificationManager
 
 		// don't subscribe if already subscribed
 		if ($force || !$device->is_subscribed_to_all_devices_topic) {
-			$response = self::subscribeDeviceToTopic($device, PushNotificationTopic::TOPIC_ALL_DEVICES);
-			$isResponseSuccessful = self::isResponseSuccessful($response);
+			$isResponseSuccessful = self::subscribeDeviceToTopic($device, PushNotificationTopic::TOPIC_ALL_DEVICES);
 
 			if ($isResponseSuccessful) {
 				$device->is_subscribed_to_all_devices_topic = true;
@@ -398,11 +397,11 @@ class PushNotificationManager
 	protected static function isResponseSuccessful($response)
 	{
 		if ((is_array($response) &&
-				isset($response['response']) &&
-				is_array($response['response']) &&
-				count($response['response']) &&
-				$response['response'][0]) &&
-			!isset($response['response'][0]['error'])) {
+				isset($response['results']) &&
+				is_array($response['results']) &&
+				count($response['results']) &&
+				$response['results'][0]) &&
+			!isset($response['results'][0]['error'])) {
 			return true;
 		}
 
