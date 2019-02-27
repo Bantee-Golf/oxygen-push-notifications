@@ -105,7 +105,7 @@ class PushNotificationManager
 		$messaging = $firebase->getMessaging();
 
 		$message = CloudMessage::withTarget('token', $device->device_push_token);
-		self::buildMessage($message, $pushNotification, $extraData, $apnsConfig, $androidConfig);
+		$message = self::buildMessage($message, $pushNotification, $extraData, $apnsConfig, $androidConfig);
 
 		$isSuccessfulResponse = self::isResponseSuccessful($messaging->send($message));
 
@@ -134,7 +134,7 @@ class PushNotificationManager
 		$messaging = $firebase->getMessaging();
 
 		$message = CloudMessage::withTarget('topic', $topicName);
-		self::buildMessage($message, $pushNotification, $extraData, $apnsConfig, $androidConfig);
+		$message = self::buildMessage($message, $pushNotification, $extraData, $apnsConfig, $androidConfig);
 
 		$isSuccessfulResponse = self::isResponseSuccessful($messaging->send($message));
 

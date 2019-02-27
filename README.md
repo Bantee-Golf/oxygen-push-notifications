@@ -128,6 +128,13 @@ php artisan oxygen:push-notifications-subscribe-devices --topic=ios_devices
 php artisan oxygen:push-notifications-subscribe-devices --topic=android_devices
 ```
 
+### Testing
+
+To test push notifications to a user, device or topic, run the following command. (You'll be prompted for additional commands.)
+
+```
+php artisan oxygen:push-notifications-test
+```
 
 ## Installation
 
