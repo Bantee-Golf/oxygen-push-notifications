@@ -55,7 +55,7 @@ class PushNotificationManager
 	 * @param \App\User                 $user
 	 * @param PushNotificationInterface $pushNotification
 	 */
-	public static function sendPushNotificationToUser(\App\User $user, PushNotificationInterface $pushNotification, $extraData = [], ApnsConfig $apnsConfig = null, AndroidConfig $androidConfig = null)
+	public static function sendPushNotificationToUser(\App\User $user, PushNotificationInterface $pushNotification, $extraData = [], $apnsConfig = null, $androidConfig = null)
 	{
 		$firebase = (new Factory)->create();
 		$messaging = $firebase->getMessaging();
@@ -99,7 +99,7 @@ class PushNotificationManager
 	 * @param Device                    $device
 	 * @param PushNotificationInterface $pushNotification
 	 */
-	public static function sendPushNotificationToDevice(Device $device, PushNotificationInterface $pushNotification, $extraData = [], ApnsConfig $apnsConfig = null, AndroidConfig $androidConfig = null)
+	public static function sendPushNotificationToDevice(Device $device, PushNotificationInterface $pushNotification, $extraData = [], $apnsConfig = null, $androidConfig = null)
 	{
 		$firebase = (new Factory)->create();
 		$messaging = $firebase->getMessaging();
@@ -128,7 +128,7 @@ class PushNotificationManager
 	 * @param                           $topicName
 	 * @param PushNotificationInterface $pushNotification
 	 */
-	public static function sendPushNotificationToTopic($topicName, PushNotificationInterface $pushNotification, $extraData = [], ApnsConfig $apnsConfig = null, AndroidConfig $androidConfig = null)
+	public static function sendPushNotificationToTopic($topicName, PushNotificationInterface $pushNotification, $extraData = [], $apnsConfig = null, $androidConfig = null)
 	{
 		$firebase = (new Factory)->create();
 		$messaging = $firebase->getMessaging();
