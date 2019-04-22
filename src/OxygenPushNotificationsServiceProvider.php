@@ -4,6 +4,7 @@
 namespace EMedia\OxygenPushNotifications;
 
 
+use App\Entities\PushNotifications\PushNotificationsRepository;
 use EMedia\OxygenPushNotifications\Console\Commands\SendPushNotificationsQueueCommand;
 use EMedia\OxygenPushNotifications\Console\Commands\SubscribeDevicesToTopic;
 use EMedia\OxygenPushNotifications\Console\Commands\OxygenPushNotificationsPackageSetupCommand;
@@ -32,7 +33,10 @@ class OxygenPushNotificationsServiceProvider extends ServiceProvider
 		}
 
 		$this->commands(SubscribeDevicesToTopic::class);
-		$this->commands(SendPushNotificationsQueueCommand::class);
+
+		if (class_exists(PushNotificationsRepository::class)) {
+			$this->commands(SendPushNotificationsQueueCommand::class);
+		}
 	}
 
 }
