@@ -90,7 +90,9 @@ class PushNotification extends Model implements PushNotificationInterface
 	{
 		parent::boot();
 		self::creating(function ($model) {
-			$model->uuid = (string) \Webpatser\Uuid\Uuid::generate(4);
+			if (empty($model->uuid)) {
+				$model->uuid = (string) \Webpatser\Uuid\Uuid::generate(4);
+			}
 		});
 	}
 
@@ -141,7 +143,7 @@ class PushNotification extends Model implements PushNotificationInterface
 	 */
 	public function getAndroidConfigAttribute()
 	{
-		if (empty($this->apns_config)) return [];
+		if (empty($this->android_config)) return [];
 
 		try {
 			return json_decode($this->android_config, true);
@@ -160,15 +162,22 @@ class PushNotification extends Model implements PushNotificationInterface
 	 */
 	public function getDataAttribute()
 	{
-		if (empty($this->apns_config)) return [];
-
 		try {
-			return json_decode($this->data, true);
+			return json_decode($this->attributes['data'], true);
 		} catch (\Exception $ex) {
 			//
 		}
 
 		return [];
+	}
+
+	public function setDataAttribute($value)
+	{
+		try {
+			$this->attributes['data'] = json_encode($value);
+		} catch (\Exception $ex) {
+			//
+		}
 	}
 
 	public function setDataConfigAttribute($value)
