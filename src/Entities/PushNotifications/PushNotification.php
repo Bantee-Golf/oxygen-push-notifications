@@ -160,10 +160,15 @@ class PushNotification extends Model implements PushNotificationInterface
 	 *
 	 * @return array
 	 */
-	public function getDataAttribute()
+	public function getDataAttribute($removeNulls = true)
 	{
 		try {
-			return json_decode($this->attributes['data'], true);
+			$dataArray = json_decode($this->attributes['data'], true);
+			// firebase doesn't accept null values - so strip them before sending the response
+			if ($removeNulls) {
+				return array_filter($dataArray);
+			}
+			return $dataArray;
 		} catch (\Exception $ex) {
 			//
 		}
