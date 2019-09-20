@@ -32,6 +32,8 @@ class OxygenPushNotificationsServiceProvider extends ServiceProvider
 			$this->commands(TestPushNotificationsCommand::class);
 		}
 
+		$this->mergeConfigFrom( __DIR__ . '/../config/features.php', 'features');
+
 		$this->commands(SubscribeDevicesToTopic::class);
 
 		if (class_exists(PushNotificationsRepository::class)) {

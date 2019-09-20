@@ -220,4 +220,33 @@ class PushNotification extends Model implements PushNotificationInterface
 			$this->save();
 		}
 	}
+
+
+	public function getIsReadAttribute()
+	{
+		if (empty($this->read_at)) {
+			return false;
+		}
+
+		return true;
+	}
+
+	public function getSentTimeLabelAttribute()
+	{
+		if (!empty($this->sent_at)) {
+			return $this->sent_at->diffForHumans();
+		}
+
+		return '';
+	}
+
+	public function getScheduledAtStringAttribute()
+	{
+		if (!empty($this->attributes['scheduled_at'])) {
+			return $this->scheduled_at->format('m/d/Y g:i A');
+		}
+
+		return '';
+	}
+
 }

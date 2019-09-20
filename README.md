@@ -16,7 +16,6 @@ This package allows you to:
 
 ![Webp.net-resizeimage.png](https://bitbucket.org/repo/9prpM9o/images/1056976072-Webp.net-resizeimage.png)
 
-
 ### Send Push Notifications
 
 All notifications are stored in the database and can be processed later as a queue. Notifications can be assigned to a User, Device or a Topic.
@@ -192,8 +191,18 @@ Add Menu Item to Oxygen on `sidebar.blade.php`, add the menu item.
 
 If required, add the add the seeder file manually to `DatabaseSeeder.php`
 
+Run the migrations, and seed the database
+```
+php artisan migrate
+```
 
-##### STEP 2. Create a Service Account
+##### STEP 2. Add the UI
+
+The date/time picker for the scheduling function on the form depends on `Tempus Dominus` plugin for Bootstrap 4. Add the plugin to the master layout page to show the scheduler, otherwise you'll get an error on page.
+
+[Date/Time Plugin Installation Instructions](https://tempusdominus.github.io/bootstrap-4/)
+
+##### STEP 3. Create a Service Account
 
 This package uses [Firebase Admin SDK](https://firebase-php.readthedocs.io/en/stable/) to connect to Firebase Cloud Messaging.
 
@@ -205,7 +214,7 @@ For authentication, you must use a Google Service Account. [Check their document
 1. Give the permissions as a `Project > Editor`.
 1. Create a new key, and download the `json` file.
 
-##### STEP 3. Link the key to project
+##### STEP 4. Link the key to project
 
 1. Store the key file in `storage/keys` or a similar location.
 1. Add the file path to `.gitignore` file.

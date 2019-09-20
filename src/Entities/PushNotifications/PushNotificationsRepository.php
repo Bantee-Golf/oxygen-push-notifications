@@ -7,6 +7,8 @@ namespace EMedia\OxygenPushNotifications\Entities\PushNotifications;
 use App\Entities\BaseRepository;
 use App\Entities\PushNotifications\PushNotification;
 use Carbon\Carbon;
+use EMedia\Devices\Entities\Devices\Device;
+use EMedia\OxygenPushNotifications\Domain\PushNotificationTopic;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
@@ -76,6 +78,92 @@ class PushNotificationsRepository extends BaseRepository
 		$query->orderBy('scheduled_at');
 
 		return $query;
+	}
+
+
+	protected function fillCustomFields(Request $request, Model $entity)
+	{
+
+		$scheduledAtTime = now();
+
+		if ($request->filled('scheduled_at_string')) {
+			try {
+				$scheduledAtTime = \Carbon\Carbon::createFromFormat('m/d/Y h:i A', $request->scheduled_at_string);
+			} catch (\Exception $ex) {
+
+			}
+		}
+
+		// https://firebase-php.readthedocs.io/en/latest/cloud-messaging.html
+		// set the android channel ID
+		/** @var PushNotification $entity */
+		$entity->androidConfig = [
+			'notification' => [
+				'android_channel_id' => 'bendix-news',
+				'sound' => 'default',
+				'badge' => 1,
+			]
+		];
+
+		$entity->apnsConfig = [
+			'payload' => [
+				'apns' => [
+					'sound' => 'default',
+					'badge' => 1,
+				]
+			]
+		];
+
+		// if there's no topic, but has a device_id, then send to that device
+		$device = null;
+		if (request()->has('device_id')) {
+			$device = Device::where('id', request()->input('device_id'))->first();
+			if ($device) $entity->notifiable()->associate($device);
+		}
+
+		$entity->scheduled_at = $scheduledAtTime;
+		$entity->scheduled_timezone = $scheduledAtTime->timezoneName;
+	}
+
+	public function getNotificationsForNotifiableDevice(Device $notifiable, $limit = 50)
+	{
+		$query = PushNotification::query();
+
+		$query->whereNotNull('sent_at');
+
+		$query->with(['status' => function ($q) use ($notifiable) {
+			return $q->wherePivot('device_id', '=', $notifiable->id);
+		}]);
+
+		$broadcastTopics = [PushNotificationTopic::TOPIC_ALL_DEVICES];
+
+		if ($notifiable->device_type === 'apple') {
+			$broadcastTopics[] = PushNotificationTopic::TOPIC_IOS_DEVICES;
+		} elseif ($notifiable->device_type === 'android') {
+			$broadcastTopics[] = PushNotificationTopic::TOPIC_ANDROID_DEVICES;
+		}
+
+		// match by either the device or the topic
+		$query->where(function ($q) use ($broadcastTopics, $notifiable) {
+			$q->where(function ($q1) use ($notifiable) {
+				$q1->where('notifiable_type', get_class($notifiable));
+				$q1->where('notifiable_id', $notifiable->id);
+			})->orWhere(function ($q2) use ($broadcastTopics) {
+				$q2->whereIn('topic', $broadcastTopics);
+			});
+		});
+
+		$query->orderBy('sent_at', 'desc');
+
+		return $query->paginate($limit);
+	}
+
+	public function markAsRead(Model $model)
+	{
+		$model->read_at = now();
+		$model->save();
+
+		return $model;
 	}
 
 }
