@@ -22,17 +22,21 @@
         {
             "type": "vcs",
             "url": "git@bitbucket.org:elegantmedia/devices-laravel.git"
+        },
+        {
+            "type":"vcs",
+            "url":"git@bitbucket.org:elegantmedia/lotus.git"
         }
     ],
     "require": {
-        "php": "^7.0",
-        "illuminate/support": "^5.7",
-        "illuminate/database": "^5.7",
-        "emedia/quick-data-laravel": "~2.0",
-        "emedia/formation": "~0.0",
+        "php": "^7.2",
+        "illuminate/support": "^6.0",
+        "illuminate/database": "^6.0",
+        "emedia/quick-data-laravel": "~3.0",
+        "emedia/formation": "~0.2",
         "kreait/firebase-php": "^4.19",
-        "illuminate/notifications": "^5.7",
-        "emedia/devices-laravel": "^1.0"
+        "illuminate/notifications": "^6.0",
+        "emedia/devices-laravel": "^1.1"
     },
     "license": "proprietary",
     "autoload": {
