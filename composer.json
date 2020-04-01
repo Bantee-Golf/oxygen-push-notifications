@@ -30,13 +30,13 @@
     ],
     "require": {
         "php": "^7.2",
-        "illuminate/support": "^6.0",
-        "illuminate/database": "^6.0",
-        "emedia/quick-data-laravel": "~3.0",
-        "emedia/formation": "~0.2",
+        "illuminate/support": "^7.0",
+        "illuminate/database": "^7.0",
+        "emedia/quick-data-laravel": "^4.0",
+        "emedia/formation": "^0.3",
         "kreait/firebase-php": "^4.19",
-        "illuminate/notifications": "^6.0",
-        "emedia/devices-laravel": "^1.1"
+        "illuminate/notifications": "^7.0",
+        "emedia/devices-laravel": "^2.0"
     },
     "license": "proprietary",
     "autoload": {
