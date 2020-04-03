@@ -22,7 +22,7 @@ This package allows you to:
 | ----------|:--------------:|
 | 5.8       | 0.1.x          |
 | 6         | 0.2.x          |
-| 7         | 1.0.x          |
+| 7         | 1.x            |
 
 ### Send Push Notifications
 
