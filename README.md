@@ -16,6 +16,14 @@ This package allows you to:
 
 ![Webp.net-resizeimage.png](https://bitbucket.org/repo/9prpM9o/images/1056976072-Webp.net-resizeimage.png)
 
+#### Version Compatibility
+
+| Laravel   | Push Notifications Package Version |
+| ----------|:--------------:|
+| 5.8       | 0.1.x          |
+| 6         | 0.2.x          |
+| 7         | 1.0.x          |
+
 ### Send Push Notifications
 
 All notifications are stored in the database and can be processed later as a queue. Notifications can be assigned to a User, Device or a Topic.
