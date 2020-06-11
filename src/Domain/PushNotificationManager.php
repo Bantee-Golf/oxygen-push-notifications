@@ -12,10 +12,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Kreait\Firebase\Factory;
-use Kreait\Firebase\Messaging\AndroidConfig;
-use Kreait\Firebase\Messaging\ApnsConfig;
 use Kreait\Firebase\Messaging\CloudMessage;
-use Illuminate\Support\Facades\Log;
 
 
 class PushNotificationManager
@@ -74,7 +71,7 @@ class PushNotificationManager
 			try	{
 				$result = $messaging->send($message);
 			} catch(Exception $ex){
-				Log::error($ex->getMessage());
+				//When sending messages, if the push token is invalid or not registered, an exception has been thrown. It was not handled in prev code. So I handled it here.
 				continue;
 			}
 
