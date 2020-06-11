@@ -8,12 +8,15 @@ use App\Entities\PushNotifications\PushNotification;
 use EMedia\Devices\Entities\Devices\Device;
 use EMedia\OxygenPushNotifications\Entities\PushNotifications\PushNotificationInterface;
 use EMedia\OxygenPushNotifications\Exceptions\UnknownRecepientException;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Messaging\AndroidConfig;
 use Kreait\Firebase\Messaging\ApnsConfig;
 use Kreait\Firebase\Messaging\CloudMessage;
+use Illuminate\Support\Facades\Log;
+
 
 class PushNotificationManager
 {
@@ -68,7 +71,12 @@ class PushNotificationManager
 			$message = CloudMessage::withTarget('token', $device->device_push_token);
 			$message = self::buildMessage($message, $pushNotification, $extraData, $apnsConfig, $androidConfig);
 
-			$result = $messaging->send($message);
+			try	{
+				$result = $messaging->send($message);
+			} catch(Exception $ex){
+				Log::error($ex->getMessage());
+				continue;
+			}
 
 			/*
 			|--------------------------------------------------------------------------
