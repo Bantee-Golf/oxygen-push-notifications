@@ -99,7 +99,7 @@ class PushNotificationsRepository extends BaseRepository
 		/** @var PushNotification $entity */
 		$entity->androidConfig = [
 			'notification' => [
-				'android_channel_id' => 'bendix-news',
+				'android_channel_id' => 'app-channel-custom-id',
 				'sound' => 'default',
 				'badge' => 1,
 			]

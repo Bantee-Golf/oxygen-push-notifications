@@ -22,6 +22,9 @@ class OxygenPushNotificationsServiceProvider extends ServiceProvider
 			__DIR__ . '/../PublishingFiles/app/Entities/PushNotifications' 	=> app_path('Entities/PushNotifications'),
 
 			__DIR__ . '/../PublishingFiles/app/Http/Controllers/Manage' 		=> app_path('Http/Controllers/Manage'),
+
+			__DIR__ . '/../PublishingFiles/app/Http/Controllers/API' 		=> app_path('Http/Controllers/API'),
+
 		], 'package-required-files');
 	}
 

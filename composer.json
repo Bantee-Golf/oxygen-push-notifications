@@ -26,6 +26,10 @@
         {
             "type":"vcs",
             "url":"git@bitbucket.org:elegantmedia/lotus.git"
+        },
+        {
+            "type":"vcs",
+            "url":"git@bitbucket.org:elegantmedia/laravel-api-helpers.git"
         }
     ],
     "require": {
@@ -36,7 +40,8 @@
         "emedia/formation": "^0.3",
         "kreait/firebase-php": "^4.19",
         "illuminate/notifications": "^7.0",
-        "emedia/devices-laravel": "^2.0"
+        "emedia/devices-laravel": "^2.0",
+        "emedia/api": "^3.1"
     },
     "license": "proprietary",
     "autoload": {

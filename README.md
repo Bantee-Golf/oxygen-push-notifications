@@ -13,6 +13,7 @@ This package allows you to:
 - Unsubscribe devices from topics.
 - Scheduled notifications to be sent out at a later date and time.
 - Allow admin to create and manage notifications from Dashboard.
+- API to get Notifications, Mark Notifications as Read
 
 ![Webp.net-resizeimage.png](https://bitbucket.org/repo/9prpM9o/images/1056976072-Webp.net-resizeimage.png)
 
@@ -70,7 +71,7 @@ php artisan oxygen:push-notifications-send
 $schedule->command('oxygen:push-notifications-send')->everyMinute();
 ```
 
-To send an indidual notification (for testing or debugging), pass the notification Id.
+To send an individual notification (for testing or debugging), pass the notification Id.
 
 ```
 php artisan oxygen:push-notifications-send --id=5
@@ -197,7 +198,7 @@ Add Menu Item to Oxygen on `sidebar.blade.php`, add the menu item.
 <li><a href="{{ route('manage.push-notifications.index') }}"><i class="fas fa-comment"></i> Push Notifications</a></li>
 ```
 
-If required, add the add the seeder file manually to `DatabaseSeeder.php`
+If required, add the seeder file manually to `DatabaseSeeder.php`
 
 Run the migrations, and seed the database
 ```
