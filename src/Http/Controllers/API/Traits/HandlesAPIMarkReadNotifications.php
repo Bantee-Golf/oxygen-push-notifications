@@ -36,7 +36,7 @@ trait HandlesAPIMarkReadNotifications
 				->setParams([
 					(new Param('device_id', 'String', 'Unique ID of the device')),
 					(new Param('device_type', 'String', 'Type of the device `apple` or `android`')),
-					(new Param('uuid', 'String', 'Notification Uuid - Sent by the server for the notification')),
+					(new Param('uuid', 'String', 'Notification Uuid - Sent by the server for the notification'))->setLocation(Param::LOCATION_PATH),
 				])
 				->setSuccessExample('{
 									"payload": {
