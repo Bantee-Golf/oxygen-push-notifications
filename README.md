@@ -136,6 +136,26 @@ php artisan oxygen:push-notifications-subscribe-devices --topic=ios_devices
 php artisan oxygen:push-notifications-subscribe-devices --topic=android_devices
 ```
 
+#### Enable Notification Sound
+
+
+```
+    $push = new PushNotification([
+           'title' => "Title",
+           'message' => "Message",
+    ]);
+    $push->scheduled_at = now();
+    $push->scheduled_timezone = now()->timezoneName;
+    $push->save();
+
+    $apn = ['payload' =>['aps'=>['sound'=>"default"]]];
+    $android = ['notification' =>['sound'=>"default"]];
+
+    PushNotificationManager::sendPushNotificationToUser($user, $push, $extraData = $data, $apnsConfig = $apn, $androidConfig = $android);
+
+```
+
+
 ### Testing
 
 To test push notifications to a user, device or topic, run the following command. (You'll be prompted for additional commands.)
@@ -239,6 +259,7 @@ The `GOOGLE_APPLICATION_CREDENTIALS` variable is required, and the path must be 
 - **DO NOT STORE they key** in `public_html`, `storage/public` or any other public paths.
 - **DO NOT COMMIT the key** to Git history.
 - **DO NOT KEEP production keys** on a local or staging environment. Using production keys on staging or local machine, can cause you to broadcast push notifications accidentally to live app users! Use separate Firebase projects for testing and production.
+
 
 ### Bugs/Errors?
 
