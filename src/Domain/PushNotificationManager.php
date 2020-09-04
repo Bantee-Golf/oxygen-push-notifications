@@ -353,10 +353,7 @@ class PushNotificationManager
 	public static function subscribeDevicesToTopic(Collection $devices, $topicName)
 	{
 		$firebase = (new Factory)->create();
-        $tokens = $devices->pluck('device_push_token')->where([
-            ['device_push_token', '!=', null],
-            ['device_push_token', '!=', ''],
-        ])->toArray();
+        $tokens = $devices->whereNotNull('device_push_token')->pluck('device_push_token')->toArray();
 
         if (!empty($tokens))
 		    return $firebase->getMessaging()->subscribeToTopic($topicName, $tokens);
