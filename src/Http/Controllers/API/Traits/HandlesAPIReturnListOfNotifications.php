@@ -6,8 +6,8 @@ namespace EMedia\OxygenPushNotifications\Http\Controllers\API\Traits;
 
 use App\Entities\PushNotifications\PushNotification;
 use EMedia\Api\Docs\APICall;
-use EMedia\Api\Docs\Param;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 
 trait HandlesAPIReturnListOfNotifications
 {
@@ -29,16 +29,10 @@ trait HandlesAPIReturnListOfNotifications
 		document(function () {
 			return (new APICall)
 				->setGroup('Notifications')
-				->setName('Get a List of Notifications')
+				->setName('List Notifications')
 				->setDescription('The `data` variable may contain additional data. It is the client\'s responsibility to validate the data and ensure the variables exist. The `unread_count` is the total unread messages to the given page. It does not calculate the sum of all unread messages for all pages. This should be sufficient for the practical use.')
-				->noDefaultHeaders()->setHeaders([
-					(new Param('Accept', 'String', '`application/json`'))->setDefaultValue('application/json'),
-					(new Param('x-api-key', 'String', 'API Key'))->setDefaultValue('123123123123'),
-				])
-				->setParams([
-					(new Param('device_id', 'String', 'Unique ID of the device')),
-					(new Param('device_type', 'String', 'Type of the device `apple` or `android`')),
-				])
+				->setApiKeyHeader()
+				->setParams($this->getDeviceIdHeaderParams())
 				->setSuccessExample('{
     "unread_count": 6,
     "payload": [
@@ -91,15 +85,12 @@ trait HandlesAPIReturnListOfNotifications
 				->setSuccessPaginatedObject(PushNotification::class);
 		});
 
-		$this->validate($request, [
-			'device_id' => 'required',
-			'device_type' => 'required',
-		]);
+		$this->validateDeviceIdHeaders();
 
-		$device = $this->devicesRepo->getByIDAndType($request->device_id, $request->device_type);
+		$device = $this->devicesRepo->getByIDAndType($request->header('x-device-id'), $request->header('x-device-type'));
 
 		if (!$device) {
-			return response()->apiError('Device data does not exist.');
+			return response()->apiError("Can't find a device with given ID and type.");
 		}
 
 		// build the notifications
@@ -128,7 +119,7 @@ trait HandlesAPIReturnListOfNotifications
 		}
 
 		$unreadItems = $notificationsResponseItems->filter(function ($item) {
-			return $item->is_read == false;
+			return $item->is_read === false;
 		});
 
 		$paginator = new \Illuminate\Pagination\LengthAwarePaginator(
