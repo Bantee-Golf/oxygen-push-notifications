@@ -41,7 +41,7 @@
         "kreait/firebase-php": "^4.19",
         "illuminate/notifications": "^7.0",
         "emedia/devices-laravel": "^2.0",
-        "emedia/api": "^3.1"
+        "emedia/api": "^3.0"
     },
     "license": "proprietary",
     "autoload": {

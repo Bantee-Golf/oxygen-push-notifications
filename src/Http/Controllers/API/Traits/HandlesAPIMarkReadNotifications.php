@@ -7,6 +7,7 @@ namespace EMedia\OxygenPushNotifications\Http\Controllers\API\Traits;
 use App\Entities\PushNotifications\PushNotification;
 use EMedia\Api\Docs\APICall;
 use EMedia\Api\Docs\Param;
+use EMedia\Api\Domain\Postman\PostmanVar;
 use Illuminate\Http\Request;
 
 trait HandlesAPIMarkReadNotifications
@@ -23,21 +24,18 @@ trait HandlesAPIMarkReadNotifications
 	 * @return \Illuminate\Http\JsonResponse
 	 * @throws \Illuminate\Validation\ValidationException
 	 */
-	public function markRead(Request $request)
+	public function markRead(Request $request, $uuid)
 	{
 		document(function () {
 			return (new APICall)
 				->setGroup('Notifications')
 				->setName('Mark a Notification as Read')
-				->noDefaultHeaders()->setHeaders([
-					(new Param('Accept', 'String', '`application/json`'))->setDefaultValue('application/json'),
-					(new Param('x-api-key', 'String', 'API Key'))->setDefaultValue('123123123123'),
-				])
-				->setParams([
-					(new Param('device_id', 'String', 'Unique ID of the device')),
-					(new Param('device_type', 'String', 'Type of the device `apple` or `android`')),
-					(new Param('uuid', 'String', 'Notification Uuid - Sent by the server for the notification'))->setLocation(Param::LOCATION_PATH),
-				])
+				->setApiKeyHeader()
+				->setParams(array_merge($this->getDeviceIdHeaderParams(), [
+					(new Param('uuid', 'String', 'Notification Uuid - Sent by the server for the notification'))
+						->setDefaultValue('uuid-1234-1234-1234')
+						->setLocation(Param::LOCATION_PATH),
+				]))
 				->setSuccessExample('{
 									"payload": {
 										"uuid": "1234-1234-1234-SEED",
@@ -53,16 +51,12 @@ trait HandlesAPIMarkReadNotifications
 				->setSuccessObject(PushNotification::class);
 		});
 
-		$this->validate($request, [
-			'device_id' => 'required',
-			'device_type' => 'required',
-			'uuid' => 'required',
-		]);
+		$this->validateDeviceIdHeaders();
 
-		$device = $this->devicesRepo->getByIDAndType($request->device_id, $request->device_type);
+		$device = $this->devicesRepo->getByIDAndType($request->header('x-device-id'), $request->header('x-device-type'));
 
 		if (!$device) {
-			return response()->apiError('Device data does not exist.');
+			return response()->apiError("Can't find a device with given ID and type.");
 		}
 
 		/** @var PushNotification $notification */
@@ -89,6 +83,7 @@ trait HandlesAPIMarkReadNotifications
 				return response()->apiError($ex->getMessage());
 			}
 
+			// update the value for the response
 			$notification->read_at = now();
 		}
 
