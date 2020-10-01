@@ -37,7 +37,7 @@
         "illuminate/support": "^7.0",
         "illuminate/database": "^7.0",
         "emedia/quick-data-laravel": "^4.0",
-        "emedia/formation": "^0.3",
+        "emedia/formation": "^0.4",
         "kreait/firebase-php": "^4.19",
         "illuminate/notifications": "^7.0",
         "emedia/devices-laravel": "^2.0",
