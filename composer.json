@@ -29,14 +29,11 @@
         }
     ],
     "require": {
-        "php": "^7.2",
-        "illuminate/support": "^6.0",
-        "illuminate/database": "^6.0",
-        "emedia/quick-data-laravel": "~3.0",
-        "emedia/formation": "~0.2",
+        "php": "^7.3",
+        "elegantmedia/oxygen-foundation": "^1.0",
+        "emedia/formation": "^0.4.0",
         "kreait/firebase-php": "^4.19",
-        "illuminate/notifications": "^6.0",
-        "emedia/devices-laravel": "^1.1"
+        "emedia/devices-laravel": "^3.0"
     },
     "license": "proprietary",
     "autoload": {
