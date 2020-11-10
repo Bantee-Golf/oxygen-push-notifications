@@ -1,8 +1,6 @@
 <?php
 
-
 namespace EMedia\OxygenPushNotifications;
-
 
 use App\Entities\PushNotifications\PushNotificationsRepository;
 use EMedia\OxygenPushNotifications\Console\Commands\SendPushNotificationsQueueCommand;
@@ -13,16 +11,20 @@ use Illuminate\Support\ServiceProvider;
 
 class OxygenPushNotificationsServiceProvider extends ServiceProvider
 {
-
 	public function boot()
 	{
 		$this->loadViewsFrom(__DIR__ . '/../resources/views', 'oxygen-push-notifications');
 
-		$this->publishes([
-			__DIR__ . '/../PublishingFiles/app/Entities/PushNotifications' 	=> app_path('Entities/PushNotifications'),
+        $this->publishes([
+            __DIR__ . '/../publish' => base_path(),
+        ], 'oxygen::auto-publish');
 
-			__DIR__ . '/../PublishingFiles/app/Http/Controllers/Manage' 		=> app_path('Http/Controllers/Manage'),
-		], 'package-required-files');
+		/*$this->publishes([
+			__DIR__ . '/../publish/app/Entities/PushNotifications' => app_path('Entities/PushNotifications'),
+			__DIR__ . '/../publish/app/Http/Controllers/Manage' => app_path('Http/Controllers/Manage'),
+		], 'package-required-files');*/
+
+        $this->setupNavItem();
 	}
 
 	public function register()
@@ -41,4 +43,13 @@ class OxygenPushNotificationsServiceProvider extends ServiceProvider
 		}
 	}
 
+    protected function setupNavItem()
+    {
+        // register the menu items
+        $navItem = new NavItem('Push Notifications');
+        $navItem->setResource('manage.push-notifications.index')
+            ->setIconClass('fas fa-comment');
+
+        Navigator::addItem($navItem, 'sidebar.manage');
+    }
 }

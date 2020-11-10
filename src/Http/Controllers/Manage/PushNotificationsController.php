@@ -4,14 +4,14 @@
 namespace EMedia\OxygenPushNotifications\Http\Controllers\Manage;
 
 
-use App\Entities\PushNotifications\PushNotification;
-use App\Entities\PushNotifications\PushNotificationsRepository;
+use EMedia\OxygenPushNotifications\Entities\PushNotifications\PushNotification;
+use EMedia\OxygenPushNotifications\Entities\PushNotifications\PushNotificationsRepository;
 use App\Http\Controllers\Controller;
 
 use EMedia\Devices\Entities\Devices\Device;
 use EMedia\Devices\Entities\Devices\DevicesRepository;
 use EMedia\Formation\Builder\Formation;
-use EMedia\Oxygen\Http\Controllers\Traits\HasHttpCRUD;
+use ElegantMedia\OxygenFoundation\Http\Traits\Web\CanCRUD;
 use EMedia\OxygenPushNotifications\Domain\PushNotificationManager;
 use EMedia\OxygenPushNotifications\Domain\PushNotificationTopic;
 use EMedia\OxygenPushNotifications\Exceptions\UnknownRecepientException;
@@ -20,9 +20,9 @@ use Illuminate\Http\Request;
 class PushNotificationsController extends Controller
 {
 
-	use HasHttpCRUD;
+	use CanCRUD;
 
-	public function __construct(PushNotificationsRepository $dataRepo, PushNotification $model)
+	public function __construct(PushNotificationsRepository $repo, PushNotification $model)
 	{
 		$this->dataRepo = $dataRepo;
 		$this->model = $model;
@@ -30,7 +30,15 @@ class PushNotificationsController extends Controller
 		$this->entitySingular = 'Push Notification';
 		$this->entityPlural   = 'Push Notifications';
 
-		$this->isDestroyingEntityAllowed = true;
+        $this->repo = $repo;
+
+        $this->resourceEntityName = 'Push Notifications';
+
+        $this->viewsVendorName = 'oxygen-push-notifications';
+
+        $this->resourcePrefix = 'manage';
+
+        $this->isDestroyAllowed = true;
 	}
 
 	protected function indexRouteName()
