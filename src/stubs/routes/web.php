@@ -1,3 +1,5 @@
+<?php
+
 // Start OxygenPushNotifications Routes
 Route::group(['prefix' => 'manage', 'middleware' => ['auth', 'auth.acl:roles[super-admins|admins|developers]'], 'as' => 'manage.'], function()
 {

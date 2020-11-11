@@ -1,6 +1,5 @@
 <?php
 
-
 use App\Entities\PushNotifications\PushNotification;
 use Illuminate\Database\Seeder;
 

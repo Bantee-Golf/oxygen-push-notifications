@@ -3,9 +3,11 @@
 namespace EMedia\OxygenPushNotifications;
 
 use App\Entities\PushNotifications\PushNotificationsRepository;
+use ElegantMedia\OxygenFoundation\Facades\Navigator;
+use ElegantMedia\OxygenFoundation\Navigation\NavItem;
 use EMedia\OxygenPushNotifications\Console\Commands\SendPushNotificationsQueueCommand;
 use EMedia\OxygenPushNotifications\Console\Commands\SubscribeDevicesToTopic;
-use EMedia\OxygenPushNotifications\Console\Commands\OxygenPushNotificationsPackageSetupCommand;
+use EMedia\OxygenPushNotifications\Console\Commands\OxygenPushNotificationsInstallCommand;
 use EMedia\OxygenPushNotifications\Console\Commands\TestPushNotificationsCommand;
 use Illuminate\Support\ServiceProvider;
 
@@ -30,7 +32,7 @@ class OxygenPushNotificationsServiceProvider extends ServiceProvider
 	public function register()
 	{
 		if (!app()->environment('production')) {
-			$this->commands(OxygenPushNotificationsPackageSetupCommand::class);
+			$this->commands(OxygenPushNotificationsInstallCommand::class);
 			$this->commands(TestPushNotificationsCommand::class);
 		}
 

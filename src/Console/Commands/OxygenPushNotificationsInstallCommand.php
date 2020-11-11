@@ -4,26 +4,31 @@
 namespace EMedia\OxygenPushNotifications\Console\Commands;
 
 
-use EMedia\Helpers\Console\Commands\Packages\BasePackageSetupCommand;
+use ElegantMedia\OxygenFoundation\Console\Commands\ExtensionInstallCommand;
 use EMedia\OxygenPushNotifications\OxygenPushNotificationsServiceProvider;
 
-class OxygenPushNotificationsPackageSetupCommand extends BasePackageSetupCommand
+class OxygenPushNotificationsInstallCommand extends ExtensionInstallCommand
 {
+    protected $signature = 'oxygen:push-notifications:install';
 
-	protected $signature = 'setup:package:oxygen-push-notifications';
+    protected $description = 'Push notifications management package for Oxygen';
 
-	protected $description = 'Push notifications management package for Oxygen';
+    public function getExtensionServiceProvider(): string
+    {
+        return OxygenPushNotificationsServiceProvider::class;
+    }
 
-	protected $packageName = 'Push Notifications';
-
-	protected $updateRoutesFile = true;
+    public function getExtensionDisplayName(): string
+    {
+        return 'Push Notifications';
+    }
 
 	/**
 	 *
 	 * Any name to display to the user
 	 *
 	 * @return mixed
-	 */
+	 *
 	protected function generateMigrations()
 	{
 		$this->copyMigrationFile(__DIR__, '001_create_push_notifications_table.php', \CreatePushNotificationsTable::class);
@@ -42,5 +47,5 @@ class OxygenPushNotificationsPackageSetupCommand extends BasePackageSetupCommand
 			'--provider' => OxygenPushNotificationsServiceProvider::class,
 			'--tag' => 'package-required-files'
 		]);
-	}
+	}*/
 }
