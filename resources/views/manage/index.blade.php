@@ -37,7 +37,7 @@
                 @if ($item->topic)
                     <div class="badge badge-info">{{ $item->topic_display_name }}</div>
                 @elseif ($item->notifiable)
-                    @if ($item->notifiable instanceof \App\User)
+                    @if ($item->notifiable instanceof \App\Models\User)
                         <div class="badge badge-info">{{ $item->notifiable->full_name }}</div>
                     @elseif ($item->notifiable instanceof \EMedia\Devices\Entities\Devices\Device)
                         <div class="badge badge-info">{{ strtoupper($item->device_type) }} DEVICE</div>

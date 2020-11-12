@@ -1,9 +1,8 @@
 <?php
 
+namespace EMedia\OxygenPushNotifications\Commands;
 
-namespace EMedia\OxygenPushNotifications\Console\Commands;
-
-use App\Entities\PushNotifications\PushNotification;
+use EMedia\OxygenPushNotifications\Entities\PushNotifications\PushNotification;
 use EMedia\Devices\Entities\Devices\Device;
 use EMedia\OxygenPushNotifications\Domain\PushNotificationManager;
 use Illuminate\Console\Command;
@@ -74,7 +73,7 @@ class TestPushNotificationsCommand extends Command
 	protected function sendToUser($n)
 	{
 		$userId = $this->ask('What is the user ID?');
-		$user = \App\User::find($userId);
+		$user = \App\Models\User::find($userId);
 		if (!$user) {
 			$this->error('User not found.');
 			return false;

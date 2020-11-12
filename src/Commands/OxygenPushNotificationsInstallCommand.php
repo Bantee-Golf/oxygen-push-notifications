@@ -1,8 +1,6 @@
 <?php
 
-
-namespace EMedia\OxygenPushNotifications\Console\Commands;
-
+namespace EMedia\OxygenPushNotifications\Commands;
 
 use ElegantMedia\OxygenFoundation\Console\Commands\ExtensionInstallCommand;
 use EMedia\OxygenPushNotifications\OxygenPushNotificationsServiceProvider;
@@ -11,7 +9,11 @@ class OxygenPushNotificationsInstallCommand extends ExtensionInstallCommand
 {
     protected $signature = 'oxygen:push-notifications:install';
 
-    protected $description = 'Push notifications management package for Oxygen';
+    protected $description = 'Setup the Oxygen Push notifications management package';
+
+    protected $requiredServiceProviders = [
+        'Kreait\Laravel\Firebase\ServiceProvider',
+    ];
 
     public function getExtensionServiceProvider(): string
     {

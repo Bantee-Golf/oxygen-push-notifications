@@ -5,7 +5,6 @@ namespace EMedia\OxygenPushNotifications\Entities\PushNotifications;
 
 
 use App\Entities\BaseRepository;
-use App\Entities\PushNotifications\PushNotification;
 use Carbon\Carbon;
 use EMedia\Devices\Entities\Devices\Device;
 use EMedia\OxygenPushNotifications\Domain\PushNotificationTopic;
@@ -81,11 +80,9 @@ class PushNotificationsRepository extends BaseRepository
 	}
 
 
-	protected function fillCustomFields(Request $request, Model $entity)
+	protected function beforeSavingModel(Request $request, Model $entity)
 	{
-
 		$scheduledAtTime = now();
-
 		if ($request->filled('scheduled_at_string')) {
 			try {
 				$scheduledAtTime = \Carbon\Carbon::createFromFormat('m/d/Y h:i A', $request->scheduled_at_string);

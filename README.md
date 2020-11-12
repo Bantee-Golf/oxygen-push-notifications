@@ -25,7 +25,7 @@ First, create the push notification Model.
 ```
 use \EMedia\OxygenPushNotifications\Domain\PushNotificationManager;
 
-$user = \App\User::find(1);
+$user = \App\Models\User::find(1);
 
 $push = new PushNotification([
 	'title' => 'My Notification',

@@ -7,14 +7,14 @@ use EMedia\Formation\Entities\GeneratesFields;
 
 use EMedia\OxygenPushNotifications\Domain\PushNotificationTopic;
 use Illuminate\Database\Eloquent\Model;
-use EMedia\QuickData\Entities\Traits\RelationshipDataTrait;
-use EMedia\QuickData\Entities\Search\SearchableTrait;
+use Illuminate\Support\Str;
 use Kreait\Firebase\Messaging\Notification;
+use Laravel\Scout\Searchable;
 
 class PushNotification extends Model implements PushNotificationInterface
 {
 
-	use SearchableTrait, RelationshipDataTrait;
+	use Searchable;
 	use GeneratesFields;
 
 	protected $fillable = [
@@ -26,11 +26,6 @@ class PushNotification extends Model implements PushNotificationInterface
 		'scheduled_at',
 		'scheduled_timezone',
 		'topic',
-	];
-
-	protected $searchable = [
-		'title',
-		'content',
 	];
 
 	protected $editable = [
@@ -75,12 +70,6 @@ class PushNotification extends Model implements PushNotificationInterface
 		'read_at',
 	];
 
-	protected $rules = [
-		'title' => 'required|min:10|max:100',
-		'message' => 'required|min:10|max:500',
-		'topic' => 'required',
-	];
-
 	protected $manyToManyRelations = [];
 
 	/**
@@ -91,11 +80,36 @@ class PushNotification extends Model implements PushNotificationInterface
 		parent::boot();
 		self::creating(function ($model) {
 			if (empty($model->uuid)) {
-				$model->uuid = (string) \Webpatser\Uuid\Uuid::generate(4);
+				$model->uuid = (string) Str::uuid();
 			}
 		});
 	}
 
+    public function getSearchableFields(): array
+    {
+        return [
+            'title',
+            'message',
+        ];
+    }
+
+    public function getCreateRules()
+    {
+        return [
+            'title' => 'required|min:10|max:100',
+            'message' => 'required|min:10|max:500',
+            'topic' => 'required',
+        ];
+    }
+
+    public function getUpdateRules()
+    {
+        return [
+            'title' => 'required|min:10|max:100',
+            'message' => 'required|min:10|max:500',
+            'topic' => 'required',
+        ];
+    }
 
 	public function notifiable()
 	{

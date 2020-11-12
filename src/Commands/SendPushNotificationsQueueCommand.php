@@ -1,10 +1,8 @@
 <?php
 
+namespace EMedia\OxygenPushNotifications\Commands;
 
-namespace EMedia\OxygenPushNotifications\Console\Commands;
-
-
-use App\Entities\PushNotifications\PushNotificationsRepository;
+use EMedia\OxygenPushNotifications\Entities\PushNotifications\PushNotificationsRepository;
 use EMedia\OxygenPushNotifications\Domain\PushNotificationManager;
 use Illuminate\Console\Command;
 

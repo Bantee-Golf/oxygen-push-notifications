@@ -5,10 +5,10 @@ namespace EMedia\OxygenPushNotifications;
 use App\Entities\PushNotifications\PushNotificationsRepository;
 use ElegantMedia\OxygenFoundation\Facades\Navigator;
 use ElegantMedia\OxygenFoundation\Navigation\NavItem;
-use EMedia\OxygenPushNotifications\Console\Commands\SendPushNotificationsQueueCommand;
-use EMedia\OxygenPushNotifications\Console\Commands\SubscribeDevicesToTopic;
-use EMedia\OxygenPushNotifications\Console\Commands\OxygenPushNotificationsInstallCommand;
-use EMedia\OxygenPushNotifications\Console\Commands\TestPushNotificationsCommand;
+use EMedia\OxygenPushNotifications\Commands\SendPushNotificationsQueueCommand;
+use EMedia\OxygenPushNotifications\Commands\SubscribeDevicesToTopic;
+use EMedia\OxygenPushNotifications\Commands\OxygenPushNotificationsInstallCommand;
+use EMedia\OxygenPushNotifications\Commands\TestPushNotificationsCommand;
 use Illuminate\Support\ServiceProvider;
 
 class OxygenPushNotificationsServiceProvider extends ServiceProvider
@@ -20,6 +20,10 @@ class OxygenPushNotificationsServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../publish' => base_path(),
         ], 'oxygen::auto-publish');
+
+        $this->publishes([
+            __DIR__ . '/../resources/views' => base_path('resources/views/vendor/oxygen-push-notifications'),
+        ], 'views');
 
 		/*$this->publishes([
 			__DIR__ . '/../publish/app/Entities/PushNotifications' => app_path('Entities/PushNotifications'),

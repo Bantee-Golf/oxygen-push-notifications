@@ -4,7 +4,7 @@
 namespace EMedia\OxygenPushNotifications\Domain;
 
 
-use App\Entities\PushNotifications\PushNotification;
+use EMedia\OxygenPushNotifications\Entities\PushNotifications\PushNotification;
 use EMedia\Devices\Entities\Devices\Device;
 use EMedia\OxygenPushNotifications\Entities\PushNotifications\PushNotificationInterface;
 use EMedia\OxygenPushNotifications\Exceptions\UnknownRecepientException;
@@ -36,7 +36,7 @@ class PushNotificationManager
 	{
 		$notifiable = $pushNotification->notifiable;
 
-		if ($notifiable instanceof \App\User) {
+		if ($notifiable instanceof \App\Models\User) {
 			self::sendPushNotificationToUser($notifiable, $pushNotification, $pushNotification->data, $pushNotification->apnsConfig, $pushNotification->androidConfig);
 		} elseif ($notifiable instanceof Device) {
 			self::sendPushNotificationToDevice($notifiable, $pushNotification, $pushNotification->data, $pushNotification->apnsConfig, $pushNotification->androidConfig);
@@ -52,13 +52,13 @@ class PushNotificationManager
 	 *
 	 * Send a push notification to a user's all devices
 	 *
-	 * @param \App\User                 $user
+	 * @param \App\Models\User                 $user
 	 * @param PushNotificationInterface $pushNotification
 	 */
-	public static function sendPushNotificationToUser(\App\User $user, PushNotificationInterface $pushNotification, $extraData = [], $apnsConfig = null, $androidConfig = null)
+	public static function sendPushNotificationToUser(\App\Models\User $user, PushNotificationInterface $pushNotification, $extraData = [], $apnsConfig = null, $androidConfig = null)
 	{
-		$firebase = (new Factory)->create();
-		$messaging = $firebase->getMessaging();
+		$firebase = (new Factory)->withServiceAccount(env('GOOGLE_APPLICATION_CREDENTIALS'));
+		$messaging = $firebase->createMessaging();
 
 		$response = [];
 
@@ -101,8 +101,8 @@ class PushNotificationManager
 	 */
 	public static function sendPushNotificationToDevice(Device $device, PushNotificationInterface $pushNotification, $extraData = [], $apnsConfig = null, $androidConfig = null)
 	{
-		$firebase = (new Factory)->create();
-		$messaging = $firebase->getMessaging();
+		$firebase = (new Factory)->withServiceAccount(env('GOOGLE_APPLICATION_CREDENTIALS'));
+		$messaging = $firebase->createMessaging();
 
 		$message = CloudMessage::withTarget('token', $device->device_push_token);
 		$message = self::buildMessage($message, $pushNotification, $extraData, $apnsConfig, $androidConfig);
@@ -130,8 +130,8 @@ class PushNotificationManager
 	 */
 	public static function sendPushNotificationToTopic($topicName, PushNotificationInterface $pushNotification, $extraData = [], $apnsConfig = null, $androidConfig = null)
 	{
-		$firebase = (new Factory)->create();
-		$messaging = $firebase->getMessaging();
+		$firebase = (new Factory)->withServiceAccount(env('GOOGLE_APPLICATION_CREDENTIALS'));
+		$messaging = $firebase->createMessaging();
 
 		$message = CloudMessage::withTarget('topic', $topicName);
 		$message = self::buildMessage($message, $pushNotification, $extraData, $apnsConfig, $androidConfig);
@@ -210,7 +210,7 @@ class PushNotificationManager
 		// process 1000 records at a time - this is the max limit by `subscribeToTopic()`
 		$recordsPerIteration = 1000;
 		$processedRecordCount = 0;
-		$firebase = (new Factory)->create();
+        $firebase = (new Factory)->withServiceAccount(env('GOOGLE_APPLICATION_CREDENTIALS'));
 
 		$successCount = $failedCount = 0;
 
