@@ -16,6 +16,13 @@ This package allows you to:
 
 ![Webp.net-resizeimage.png](https://bitbucket.org/repo/9prpM9o/images/1056976072-Webp.net-resizeimage.png)
 
+## Version Compatibility
+
+| Laravel Version   | Package Version   | Branch           |
+| ----------------- | ----------------- |------------------|
+| v8                | 2.x               | master           |
+| v7                | 1.x               | version/v1.x     |
+
 ### Send Push Notifications
 
 All notifications are stored in the database and can be processed later as a queue. Notifications can be assigned to a User, Device or a Topic.
@@ -144,14 +151,10 @@ Update your `composer.json` and add these repositories.
     {
         "type": "vcs",
         "url": "git@bitbucket.org:elegantmedia/oxygen-push-notifications.git"
-    }
-    {
-        "type":"vcs",
-        "url":"git@bitbucket.org:elegantmedia/formation.git"
     },
     {
         "type":"vcs",
-        "url":"git@bitbucket.org:elegantmedia/quickdata-laravel.git"
+        "url":"git@bitbucket.org:elegantmedia/formation.git"
     },
     {
         "type": "vcs",
@@ -180,16 +183,8 @@ composer require emedia/oxygen-push-notifications
 
 Run the setup command for this package
 ```
-php artisan setup:package:oxygen-push-notifications
+php artisan oxygen:push-notifications:install
 ```
-
-Add Menu Item to Oxygen on `sidebar.blade.php`, add the menu item. 
-
-```
-<li><a href="{{ route('manage.push-notifications.index') }}"><i class="fas fa-comment"></i> Push Notifications</a></li>
-```
-
-If required, add the add the seeder file manually to `DatabaseSeeder.php`
 
 Run the migrations, and seed the database
 ```
@@ -221,10 +216,10 @@ For authentication, you must use a Google Service Account. [Check their document
 1. Update the `.env` file as below.
 
 ```
-GOOGLE_APPLICATION_CREDENTIALS="/www/sites/myproject/storage/keys/fcm_keys.json"
+FIREBASE_CREDENTIALS="/www/sites/myproject/storage/keys/fcm_keys.json"
 ```
 
-The `GOOGLE_APPLICATION_CREDENTIALS` variable is required, and the path must be the full path to the key from root (not relative path).
+The `FIREBASE_CREDENTIALS` variable is required, and the path must be the full path to the key from root (not relative path).
 
 # **IMPORTANT: READ THIS!**
 - **DO NOT STORE they key** in `public_html`, `storage/public` or any other public paths.
