@@ -32,8 +32,8 @@
         "php": "^7.3",
         "elegantmedia/oxygen-foundation": "^1.0",
         "emedia/formation": "^0.4.0",
-        "kreait/firebase-php": "^5.0",
-        "emedia/devices-laravel": "^3.0"
+        "emedia/devices-laravel": "^3.0",
+        "kreait/laravel-firebase": "^3.0"
     },
     "license": "proprietary",
     "autoload": {
