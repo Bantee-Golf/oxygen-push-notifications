@@ -2,7 +2,7 @@
 
 namespace EMedia\OxygenPushNotifications;
 
-use App\Entities\PushNotifications\PushNotificationsRepository;
+use EMedia\OxygenPushNotifications\Entities\PushNotifications\PushNotificationsRepository;
 use ElegantMedia\OxygenFoundation\Facades\Navigator;
 use ElegantMedia\OxygenFoundation\Navigation\NavItem;
 use EMedia\OxygenPushNotifications\Commands\SendPushNotificationsQueueCommand;

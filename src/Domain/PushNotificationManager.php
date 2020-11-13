@@ -3,7 +3,7 @@
 
 namespace EMedia\OxygenPushNotifications\Domain;
 
-
+use Firebase;
 use EMedia\OxygenPushNotifications\Entities\PushNotifications\PushNotification;
 use EMedia\Devices\Entities\Devices\Device;
 use EMedia\OxygenPushNotifications\Entities\PushNotifications\PushNotificationInterface;
@@ -57,8 +57,7 @@ class PushNotificationManager
 	 */
 	public static function sendPushNotificationToUser(\App\Models\User $user, PushNotificationInterface $pushNotification, $extraData = [], $apnsConfig = null, $androidConfig = null)
 	{
-		$firebase = (new Factory)->withServiceAccount(env('GOOGLE_APPLICATION_CREDENTIALS'));
-		$messaging = $firebase->createMessaging();
+		$messaging = Firebase::messaging();
 
 		$response = [];
 
@@ -101,8 +100,7 @@ class PushNotificationManager
 	 */
 	public static function sendPushNotificationToDevice(Device $device, PushNotificationInterface $pushNotification, $extraData = [], $apnsConfig = null, $androidConfig = null)
 	{
-		$firebase = (new Factory)->withServiceAccount(env('GOOGLE_APPLICATION_CREDENTIALS'));
-		$messaging = $firebase->createMessaging();
+        $messaging = Firebase::messaging();
 
 		$message = CloudMessage::withTarget('token', $device->device_push_token);
 		$message = self::buildMessage($message, $pushNotification, $extraData, $apnsConfig, $androidConfig);
@@ -130,8 +128,7 @@ class PushNotificationManager
 	 */
 	public static function sendPushNotificationToTopic($topicName, PushNotificationInterface $pushNotification, $extraData = [], $apnsConfig = null, $androidConfig = null)
 	{
-		$firebase = (new Factory)->withServiceAccount(env('GOOGLE_APPLICATION_CREDENTIALS'));
-		$messaging = $firebase->createMessaging();
+        $messaging = Firebase::messaging();
 
 		$message = CloudMessage::withTarget('topic', $topicName);
 		$message = self::buildMessage($message, $pushNotification, $extraData, $apnsConfig, $androidConfig);
@@ -210,7 +207,7 @@ class PushNotificationManager
 		// process 1000 records at a time - this is the max limit by `subscribeToTopic()`
 		$recordsPerIteration = 1000;
 		$processedRecordCount = 0;
-        $firebase = (new Factory)->withServiceAccount(env('GOOGLE_APPLICATION_CREDENTIALS'));
+        $messaging = Firebase::messaging();
 
 		$successCount = $failedCount = 0;
 
@@ -228,7 +225,7 @@ class PushNotificationManager
 
 			$pushTokens = $devices->pluck('device_push_token')->toArray();
 
-			$response = $firebase->getMessaging()->subscribeToTopic($topicName, $pushTokens);
+			$response = $messaging->subscribeToTopic($topicName, $pushTokens);
 
 			for ($i = 0, $iMax = $devices->count(); $i < $iMax; $i++) {
 				$result = null;
@@ -331,9 +328,9 @@ class PushNotificationManager
 	 */
 	public static function subscribeDeviceToTopic(Device $device, $topicName)
 	{
-		$firebase = (new Factory)->create();
+        $messaging = Firebase::messaging();
 
-		return self::isResponseSuccessful($firebase->getMessaging()->subscribeToTopic($topicName, [$device->device_push_token]));
+		return self::isResponseSuccessful($messaging->subscribeToTopic($topicName, [$device->device_push_token]));
 	}
 
 	/**
@@ -347,9 +344,9 @@ class PushNotificationManager
 	 */
 	public static function subscribeDevicesToTopic(Collection $devices, $topicName)
 	{
-		$firebase = (new Factory)->create();
+        $messaging = Firebase::messaging();
 
-		return $firebase->getMessaging()->subscribeToTopic($topicName, [$devices->pluck('device_push_token')->toArray()]);
+		return $messaging->subscribeToTopic($topicName, [$devices->pluck('device_push_token')->toArray()]);
 	}
 
 	/**
@@ -363,9 +360,9 @@ class PushNotificationManager
 	 */
 	public static function unsubscribeDeviceFromTopic(Device $device, $topicName)
 	{
-		$firebase = (new Factory)->create();
+        $messaging = Firebase::messaging();
 
-		return self::isResponseSuccessful($firebase->getMessaging()->unsubscribeFromTopic($topicName, [$device->device_push_token]));
+		return self::isResponseSuccessful($messaging->unsubscribeFromTopic($topicName, [$device->device_push_token]));
 	}
 
 	/**
@@ -379,9 +376,9 @@ class PushNotificationManager
 	 */
 	public static function unsubscribeDevicesFromTopic(Collection $devices, $topicName)
 	{
-		$firebase = (new Factory)->create();
+        $messaging = Firebase::messaging();
 
-		return $firebase->getMessaging()->unsubscribeFromTopic($topicName, [$devices->pluck('device_push_token')->toArray()]);
+		return $messaging->unsubscribeFromTopic($topicName, [$devices->pluck('device_push_token')->toArray()]);
 	}
 
 	/**

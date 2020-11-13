@@ -17,8 +17,7 @@ class SendPushNotificationsQueueCommand extends Command
 	 *
 	 * @var string
 	 */
-	protected $signature = 'oxygen:push-notifications-send
-    							{--id=}';
+	protected $signature = 'oxygen:push-notifications-send {--id=}';
 
 	/**
 	 * The console command description.

@@ -4,10 +4,11 @@ namespace EMedia\OxygenPushNotifications\Commands;
 
 use ElegantMedia\OxygenFoundation\Console\Commands\ExtensionInstallCommand;
 use EMedia\OxygenPushNotifications\OxygenPushNotificationsServiceProvider;
+use ElegantMedia\PHPToolkit\FileEditor;
 
 class OxygenPushNotificationsInstallCommand extends ExtensionInstallCommand
 {
-    protected $signature = 'oxygen:push-notifications:install';
+    protected $signature = 'oxygen:push-notifications:install {--install_dependencies=true}';
 
     protected $description = 'Setup the Oxygen Push notifications management package';
 
@@ -25,29 +26,63 @@ class OxygenPushNotificationsInstallCommand extends ExtensionInstallCommand
         return 'Push Notifications';
     }
 
-	/**
-	 *
-	 * Any name to display to the user
-	 *
-	 * @return mixed
-	 *
-	protected function generateMigrations()
-	{
-		$this->copyMigrationFile(__DIR__, '001_create_push_notifications_table.php', \CreatePushNotificationsTable::class);
+    /**
+     * TODO: This overwrites the function at super class.
+     * This is added beacause the main package function had an issue.
+     * This should be removed after the issue fixed in ElegantMedia\OxygenFoundation
+     *
+     * Install the Fortify service providers in the application configuration file.
+     *
+     * @return void
+     * @throws FileNotFoundException
+     */
+    protected function appendServiceProviders(): void
+    {
+        if (count($this->requiredServiceProviders) === 0) {
+            return;
+        }
 
-		$this->copyMigrationFile(__DIR__, '002_add_topic_subscriptions_to_devices_table.php', \AddTopicSubscriptionsToDevicesTable::class);
-	}
+        $path = config_path('app.php');
 
-	protected function generateSeeds()
-	{
-		$this->copySeedFile(__DIR__, 'PushNotificationsTableSeeder.php', \PushNotificationsTableSeeder::class);
-	}
+        $shortlisted = [];
+        foreach ($this->requiredServiceProviders as $serviceProvider) {
+            if (!FileEditor::isTextInFile($path, $serviceProvider)) {
+                $shortlisted[] = $serviceProvider.'::class';
+            }
+        }
 
-	protected function publishPackageFiles()
-	{
-		$this->call('vendor:publish', [
-			'--provider' => OxygenPushNotificationsServiceProvider::class,
-			'--tag' => 'package-required-files'
-		]);
-	}*/
+        if (count($shortlisted) === 0) {
+            return;
+        }
+
+        array_unshift($shortlisted, 'App\Providers\RouteServiceProvider::class');
+
+        $append = implode(','.PHP_EOL."\t\t", $shortlisted) . ",";
+
+        FileEditor::findAndReplace(
+            $path,
+            "App\\Providers\RouteServiceProvider::class,",
+            $append
+        );
+    }
+
+    /**
+     * @return bool
+     * @throws FileNotFoundException
+     * @throws \JsonException
+     */
+    protected function installRequiredDependencies(): bool
+    {
+        if (!$this->hasOption('install_dependencies')) {
+            return false;
+        }
+
+        if (!filter_var($this->option('install_dependencies'), FILTER_VALIDATE_BOOLEAN)) {
+            return false;
+        }
+
+        $this->appendServiceProviders();
+
+        return true;
+    }
 }
