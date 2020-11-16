@@ -8,12 +8,12 @@ use EMedia\OxygenPushNotifications\Entities\PushNotifications\PushNotification;
 use EMedia\Devices\Entities\Devices\Device;
 use EMedia\OxygenPushNotifications\Entities\PushNotifications\PushNotificationInterface;
 use EMedia\OxygenPushNotifications\Exceptions\UnknownRecepientException;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Kreait\Firebase\Factory;
-use Kreait\Firebase\Messaging\AndroidConfig;
-use Kreait\Firebase\Messaging\ApnsConfig;
 use Kreait\Firebase\Messaging\CloudMessage;
+
 
 class PushNotificationManager
 {
@@ -67,7 +67,12 @@ class PushNotificationManager
 			$message = CloudMessage::withTarget('token', $device->device_push_token);
 			$message = self::buildMessage($message, $pushNotification, $extraData, $apnsConfig, $androidConfig);
 
-			$result = $messaging->send($message);
+			try	{
+				$result = $messaging->send($message);
+			} catch(Exception $ex){
+				//When sending messages, if the push token is invalid or not registered, an exception has been thrown. It was not handled in prev code. So I handled it here.
+				continue;
+			}
 
 			/*
 			|--------------------------------------------------------------------------
@@ -346,7 +351,12 @@ class PushNotificationManager
 	{
         $messaging = Firebase::messaging();
 
-		return $messaging->subscribeToTopic($topicName, [$devices->pluck('device_push_token')->toArray()]);
+        $tokens = $devices->whereNotNull('device_push_token')->pluck('device_push_token')->toArray();
+
+        if (!empty($tokens))
+		    return $messaging->subscribeToTopic($topicName, $tokens);
+        else
+            return [];
 	}
 
 	/**

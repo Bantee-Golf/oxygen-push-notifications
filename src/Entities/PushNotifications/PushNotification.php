@@ -235,6 +235,30 @@ class PushNotification extends Model implements PushNotificationInterface
 		}
 	}
 
+	/**
+	 *
+	 * Check if this notification is for a User or a Device
+	 * This isn't a very reliable check, becuase we're looking for a partial class name match.
+	 * If you have conflicting classes in your project, then override this method and match on a fullly
+	 * qualified class name, for example `App\User::class`
+	 *
+	 * @return bool
+	 */
+	public function isUserOrDeviceNotification()
+	{
+		if (!empty($this->notifiable_type)) {
+			if (strpos($this->notifiable_type, '\\User') !== false) {
+				return true;
+			}
+
+			if (strpos($this->notifiable_type, '\\Device') !== false) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 
 	public function getIsReadAttribute()
 	{

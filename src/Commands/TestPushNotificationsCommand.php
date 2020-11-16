@@ -100,7 +100,7 @@ class TestPushNotificationsCommand extends Command
 	protected function sendToTopic($n)
 	{
 		$topicName = $this->ask('What is the topic name?', 'dev_test_topic');
-		if (!empty($topicName)) {
+		if (empty($topicName)) {
 			$this->error('Topic is required');
 			return false;
 		}

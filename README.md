@@ -13,6 +13,7 @@ This package allows you to:
 - Unsubscribe devices from topics.
 - Scheduled notifications to be sent out at a later date and time.
 - Allow admin to create and manage notifications from Dashboard.
+- API to get Notifications, Mark Notifications as Read
 
 ![Webp.net-resizeimage.png](https://bitbucket.org/repo/9prpM9o/images/1056976072-Webp.net-resizeimage.png)
 
@@ -22,6 +23,9 @@ This package allows you to:
 | ----------------- | ----------------- |------------------|
 | v8                | 2.x               | master           |
 | v7                | 1.x               | version/v1.x     |
+| v6                | 0.2.x             |                  |
+| v5.x              | 0.1.x             |                  |
+
 
 ### Send Push Notifications
 
@@ -52,13 +56,13 @@ $push->notifiable()->associate($user);
 $push->save();
 
 // Send the notification.
-// When the line below is called, the notification is sent immidiately to the recipient. 
+// When the line below is called, the notification is sent immidiately to the recipient.
 // The scheduled time will be ignored. If you need to send at a schedule, see the artisan command below.
 PushNotificationManager::sendStoredPushNotification($push);
 ```
 
 #### Sending Scheduled Push Notifications
- 
+
 Add the following command in Laravel Scheduler to run every minute or so.
 
 ```
@@ -69,7 +73,7 @@ php artisan oxygen:push-notifications-send
 $schedule->command('oxygen:push-notifications-send')->everyMinute();
 ```
 
-To send an indidual notification (for testing or debugging), pass the notification Id.
+To send an individual notification (for testing or debugging), pass the notification Id.
 
 ```
 php artisan oxygen:push-notifications-send --id=5
@@ -133,6 +137,26 @@ php artisan oxygen:push-notifications-subscribe-devices --topic=ios_devices
 // Subscribe Android devices
 php artisan oxygen:push-notifications-subscribe-devices --topic=android_devices
 ```
+
+#### Enable Notification Sound
+
+
+```
+    $push = new PushNotification([
+           'title' => "Title",
+           'message' => "Message",
+    ]);
+    $push->scheduled_at = now();
+    $push->scheduled_timezone = now()->timezoneName;
+    $push->save();
+
+    $apn = ['payload' =>['aps'=>['sound'=>"default"]]];
+    $android = ['notification' =>['sound'=>"default"]];
+
+    PushNotificationManager::sendPushNotificationToUser($user, $push, $extraData = $data, $apnsConfig = $apn, $androidConfig = $android);
+
+```
+
 
 ### Testing
 
@@ -225,6 +249,7 @@ The `FIREBASE_CREDENTIALS` variable is required, and the path must be the full p
 - **DO NOT STORE they key** in `public_html`, `storage/public` or any other public paths.
 - **DO NOT COMMIT the key** to Git history.
 - **DO NOT KEEP production keys** on a local or staging environment. Using production keys on staging or local machine, can cause you to broadcast push notifications accidentally to live app users! Use separate Firebase projects for testing and production.
+
 
 ### Bugs/Errors?
 
