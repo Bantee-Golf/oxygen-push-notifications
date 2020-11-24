@@ -1,6 +1,5 @@
 <?php
 
-
 use App\Entities\PushNotifications\PushNotification;
 use Illuminate\Database\Seeder;
 
@@ -18,8 +17,8 @@ class PushNotificationsTableSeeder extends Seeder
 
 		foreach(range(1, $seedUserCount) as $index)
 		{
-			/** @var \App\User $user */
-			$user = \App\User::inRandomOrder()->first();
+			/** @var \App\Models\User $user */
+			$user = \App\Models\User::inRandomOrder()->first();
 
 			$push = new PushNotification();
 			$push->title = $faker->sentence;

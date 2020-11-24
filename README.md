@@ -17,13 +17,15 @@ This package allows you to:
 
 ![Webp.net-resizeimage.png](https://bitbucket.org/repo/9prpM9o/images/1056976072-Webp.net-resizeimage.png)
 
-#### Version Compatibility
+## Version Compatibility
 
-| Laravel   | Push Notifications Package Version |
-| ----------|:--------------:|
-| 5.8       | 0.1.x          |
-| 6         | 0.2.x          |
-| 7         | 1.x            |
+| Laravel Version   | Package Version   | Branch           |
+| ----------------- | ----------------- |------------------|
+| v8                | 2.x               | master           |
+| v7                | 1.x               | version/v1.x     |
+| v6                | 0.2.x             |                  |
+| v5.x              | 0.1.x             |                  |
+
 
 ### Send Push Notifications
 
@@ -34,7 +36,7 @@ First, create the push notification Model.
 ```
 use \EMedia\OxygenPushNotifications\Domain\PushNotificationManager;
 
-$user = \App\User::find(1);
+$user = \App\Models\User::find(1);
 
 $push = new PushNotification([
 	'title' => 'My Notification',
@@ -54,13 +56,13 @@ $push->notifiable()->associate($user);
 $push->save();
 
 // Send the notification.
-// When the line below is called, the notification is sent immidiately to the recipient. 
+// When the line below is called, the notification is sent immidiately to the recipient.
 // The scheduled time will be ignored. If you need to send at a schedule, see the artisan command below.
 PushNotificationManager::sendStoredPushNotification($push);
 ```
 
 #### Sending Scheduled Push Notifications
- 
+
 Add the following command in Laravel Scheduler to run every minute or so.
 
 ```
@@ -173,14 +175,10 @@ Update your `composer.json` and add these repositories.
     {
         "type": "vcs",
         "url": "git@bitbucket.org:elegantmedia/oxygen-push-notifications.git"
-    }
-    {
-        "type":"vcs",
-        "url":"git@bitbucket.org:elegantmedia/formation.git"
     },
     {
         "type":"vcs",
-        "url":"git@bitbucket.org:elegantmedia/quickdata-laravel.git"
+        "url":"git@bitbucket.org:elegantmedia/formation.git"
     },
     {
         "type": "vcs",
@@ -209,16 +207,8 @@ composer require emedia/oxygen-push-notifications
 
 Run the setup command for this package
 ```
-php artisan setup:package:oxygen-push-notifications
+php artisan oxygen:push-notifications:install
 ```
-
-Add Menu Item to Oxygen on `sidebar.blade.php`, add the menu item. 
-
-```
-<li><a href="{{ route('manage.push-notifications.index') }}"><i class="fas fa-comment"></i> Push Notifications</a></li>
-```
-
-If required, add the seeder file manually to `DatabaseSeeder.php`
 
 Run the migrations, and seed the database
 ```
@@ -250,10 +240,10 @@ For authentication, you must use a Google Service Account. [Check their document
 1. Update the `.env` file as below.
 
 ```
-GOOGLE_APPLICATION_CREDENTIALS="/www/sites/myproject/storage/keys/fcm_keys.json"
+FIREBASE_CREDENTIALS="/www/sites/myproject/storage/keys/fcm_keys.json"
 ```
 
-The `GOOGLE_APPLICATION_CREDENTIALS` variable is required, and the path must be the full path to the key from root (not relative path).
+The `FIREBASE_CREDENTIALS` variable is required, and the path must be the full path to the key from root (not relative path).
 
 # **IMPORTANT: READ THIS!**
 - **DO NOT STORE they key** in `public_html`, `storage/public` or any other public paths.

@@ -1,10 +1,8 @@
 <?php
 
+namespace EMedia\OxygenPushNotifications\Commands;
 
-namespace EMedia\OxygenPushNotifications\Console\Commands;
-
-
-use App\Entities\PushNotifications\PushNotificationsRepository;
+use EMedia\OxygenPushNotifications\Entities\PushNotifications\PushNotificationsRepository;
 use EMedia\OxygenPushNotifications\Domain\PushNotificationManager;
 use Illuminate\Console\Command;
 
@@ -19,8 +17,7 @@ class SendPushNotificationsQueueCommand extends Command
 	 *
 	 * @var string
 	 */
-	protected $signature = 'oxygen:push-notifications-send
-    							{--id=}';
+	protected $signature = 'oxygen:push-notifications-send {--id=}';
 
 	/**
 	 * The console command description.

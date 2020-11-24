@@ -1,37 +1,42 @@
 <?php
 
-
 namespace EMedia\OxygenPushNotifications;
 
-
-use App\Entities\PushNotifications\PushNotificationsRepository;
-use EMedia\OxygenPushNotifications\Console\Commands\SendPushNotificationsQueueCommand;
-use EMedia\OxygenPushNotifications\Console\Commands\SubscribeDevicesToTopic;
-use EMedia\OxygenPushNotifications\Console\Commands\OxygenPushNotificationsPackageSetupCommand;
-use EMedia\OxygenPushNotifications\Console\Commands\TestPushNotificationsCommand;
+use EMedia\OxygenPushNotifications\Entities\PushNotifications\PushNotificationsRepository;
+use ElegantMedia\OxygenFoundation\Facades\Navigator;
+use ElegantMedia\OxygenFoundation\Navigation\NavItem;
+use EMedia\OxygenPushNotifications\Commands\SendPushNotificationsQueueCommand;
+use EMedia\OxygenPushNotifications\Commands\SubscribeDevicesToTopic;
+use EMedia\OxygenPushNotifications\Commands\OxygenPushNotificationsInstallCommand;
+use EMedia\OxygenPushNotifications\Commands\TestPushNotificationsCommand;
 use Illuminate\Support\ServiceProvider;
 
 class OxygenPushNotificationsServiceProvider extends ServiceProvider
 {
-
 	public function boot()
 	{
 		$this->loadViewsFrom(__DIR__ . '/../resources/views', 'oxygen-push-notifications');
 
-		$this->publishes([
-			__DIR__ . '/../PublishingFiles/app/Entities/PushNotifications' 	=> app_path('Entities/PushNotifications'),
+        $this->publishes([
+            __DIR__ . '/../publish' => base_path(),
+        ], 'oxygen::auto-publish');
 
-			__DIR__ . '/../PublishingFiles/app/Http/Controllers/Manage' 		=> app_path('Http/Controllers/Manage'),
+        $this->publishes([
+            __DIR__ . '/../resources/views' => base_path('resources/views/vendor/oxygen-push-notifications'),
+        ], 'views');
 
-			__DIR__ . '/../PublishingFiles/app/Http/Controllers/API' 		=> app_path('Http/Controllers/API'),
+		/*$this->publishes([
+			__DIR__ . '/../publish/app/Entities/PushNotifications' => app_path('Entities/PushNotifications'),
+			__DIR__ . '/../publish/app/Http/Controllers/Manage' => app_path('Http/Controllers/Manage'),
+		], 'package-required-files');*/
 
-		], 'package-required-files');
+        $this->setupNavItem();
 	}
 
 	public function register()
 	{
 		if (!app()->environment('production')) {
-			$this->commands(OxygenPushNotificationsPackageSetupCommand::class);
+			$this->commands(OxygenPushNotificationsInstallCommand::class);
 			$this->commands(TestPushNotificationsCommand::class);
 		}
 
@@ -44,4 +49,13 @@ class OxygenPushNotificationsServiceProvider extends ServiceProvider
 		}
 	}
 
+    protected function setupNavItem()
+    {
+        // register the menu items
+        $navItem = new NavItem('Push Notifications');
+        $navItem->setResource('manage.push-notifications.index')
+            ->setIconClass('fas fa-comment');
+
+        Navigator::addItem($navItem, 'sidebar.manage');
+    }
 }

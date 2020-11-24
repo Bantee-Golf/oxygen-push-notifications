@@ -4,14 +4,14 @@
 namespace EMedia\OxygenPushNotifications\Http\Controllers\Manage;
 
 
-use App\Entities\PushNotifications\PushNotification;
-use App\Entities\PushNotifications\PushNotificationsRepository;
+use EMedia\OxygenPushNotifications\Entities\PushNotifications\PushNotification;
+use EMedia\OxygenPushNotifications\Entities\PushNotifications\PushNotificationsRepository;
 use App\Http\Controllers\Controller;
 
 use EMedia\Devices\Entities\Devices\Device;
 use EMedia\Devices\Entities\Devices\DevicesRepository;
 use EMedia\Formation\Builder\Formation;
-use EMedia\Oxygen\Http\Controllers\Traits\HasHttpCRUD;
+use ElegantMedia\OxygenFoundation\Http\Traits\Web\CanCRUD;
 use EMedia\OxygenPushNotifications\Domain\PushNotificationManager;
 use EMedia\OxygenPushNotifications\Domain\PushNotificationTopic;
 use EMedia\OxygenPushNotifications\Exceptions\UnknownRecepientException;
@@ -20,17 +20,23 @@ use Illuminate\Http\Request;
 class PushNotificationsController extends Controller
 {
 
-	use HasHttpCRUD;
+	use CanCRUD;
 
-	public function __construct(PushNotificationsRepository $dataRepo, PushNotification $model)
+	public function __construct(PushNotificationsRepository $repo, PushNotification $model)
 	{
-		$this->dataRepo = $dataRepo;
+        $this->repo = $repo;
 		$this->model = $model;
 
 		$this->entitySingular = 'Push Notification';
 		$this->entityPlural   = 'Push Notifications';
 
-		$this->isDestroyingEntityAllowed = true;
+        $this->resourceEntityName = 'Push Notifications';
+
+        $this->viewsVendorName = 'oxygen-push-notifications';
+
+        $this->resourcePrefix = 'manage';
+
+        $this->isDestroyAllowed = true;
 	}
 
 	protected function indexRouteName()
@@ -56,9 +62,6 @@ class PushNotificationsController extends Controller
 	 */
 	public function create()
 	{
-		if (empty($this->getEntitySingular()))
-			throw new \InvalidArgumentException("'entitySingular' value of the controller is not set.");
-
 		$device = null;
 		if (request()->has('device_id')) {
 			$devicesRepo = app(DevicesRepository::class);
@@ -66,13 +69,13 @@ class PushNotificationsController extends Controller
 		}
 
 		$data = [
-			'pageTitle' => 'Add new ' . $this->getEntitySingular(),
+			'pageTitle' => $this->getCreatePageTitle(),
 			'entity' => $this->model,
 			'form' => new Formation($this->model),
 			'device' => $device,
 		];
 
-		$viewName = $this->formViewName();
+		$viewName = $this->getCreateViewName();
 
 		return view($viewName, $data);
 	}
@@ -87,10 +90,7 @@ class PushNotificationsController extends Controller
 	 */
 	public function edit($id)
 	{
-		if (empty($this->getEntitySingular()))
-			throw new \InvalidArgumentException("'entityPlural' value of the controller is not set.");
-
-		$entity = $this->dataRepo->find($id);
+		$entity = $this->repo->find($id);
 		$form = new Formation($entity);
 
 		$device = null;
@@ -99,16 +99,13 @@ class PushNotificationsController extends Controller
 		}
 
 		$data = [
-			'pageTitle' => 'Edit ' . $this->getEntitySingular(),
+			'pageTitle' => $this->getEditPageTitle($entity),
 			'entity' => $entity,
 			'form' => $form,
 			'device' => $device,
 		];
 
-		$viewName = $this->formViewName();
-		if (empty($viewName)) {
-			throw new \InvalidArgumentException("'indexViewName' is empty. Override indexViewName() method in controller.");
-		}
+        $viewName = $this->getEditViewName();
 
 		return view($viewName, $data);
 	}
@@ -121,21 +118,18 @@ class PushNotificationsController extends Controller
 	 * @return mixed
 	 * @throws UnknownRecepientException
 	 */
-	protected function storeOrUpdateRequest(Request $request, $id = null)
+	protected function storeOrUpdateRequest(Request $request, $id = null, $rules = null, $messages = null)
 	{
-		if (empty($this->indexRouteName()))
-			throw new \InvalidArgumentException("'indexRouteName()' returns an empty value.");
-
-		$this->validate($request, $this->model->getRules());
+		$this->validate($request, $rules);
 
 		/** @var PushNotification $entity */
-		$entity = $this->dataRepo->fillFromRequest($request, $id);
+		$entity = $this->repo->fillModelFromRequest($request, $id);
 
 		// send push notification
 		if (env('OXYGEN_PUSH_NOTIFICATIONS_SANDBOX', false)) {
 			PushNotificationManager::sendStoredPushNotification($entity);
 		}
 
-		return redirect()->route($this->indexRouteName());
+		return $entity;
 	}
 }

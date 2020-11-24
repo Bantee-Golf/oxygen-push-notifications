@@ -1,8 +1,0 @@
-// Start OxygenPushNotifications Routes
-Route::group(['prefix' => 'manage', 'middleware' => ['auth', 'auth.acl:roles[super-admin|admin]'], 'as' => 'manage.'], function()
-{
-	Route::resource('push-notifications', 'Manage\PushNotificationsController')
-    		 ->only('index', 'create', 'store', 'edit', 'update', 'destroy');
-
-});
-// End OxygenPushNotifications Routes

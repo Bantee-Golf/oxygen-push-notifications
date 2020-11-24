@@ -1,7 +1,6 @@
 <?php
 
-
-namespace EMedia\OxygenPushNotifications\Console\Commands;
+namespace EMedia\OxygenPushNotifications\Commands;
 
 use EMedia\OxygenPushNotifications\Domain\PushNotificationManager;
 use EMedia\OxygenPushNotifications\Domain\PushNotificationTopic;
