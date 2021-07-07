@@ -29,9 +29,9 @@
         }
     ],
     "require": {
-        "php": "^7.3",
+        "php": "^7.3|^8.0",
         "elegantmedia/oxygen-foundation": "^1.0",
-        "emedia/formation": "^0.4.0",
+        "emedia/formation": "^0.4|^0.5",
         "emedia/devices-laravel": "^3.0",
         "kreait/laravel-firebase": "^3.0"
     },
