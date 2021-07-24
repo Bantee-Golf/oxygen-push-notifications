@@ -7,12 +7,14 @@ use EMedia\Devices\Entities\Devices\DevicesRepository;
 use EMedia\OxygenPushNotifications\Http\Controllers\API\Traits\HandlesAPIMarkReadNotifications;
 use EMedia\OxygenPushNotifications\Http\Controllers\API\Traits\HandlesAPIReturnListOfNotifications;
 use EMedia\OxygenPushNotifications\Http\Controllers\API\Traits\HandlesAPIDeviceTokenSubscriptions;
+use EMedia\OxygenPushNotifications\Http\Controllers\API\Traits\ValidatesDeviceHeaders;
 
 class PushNotificationsAPIController extends \App\Http\Controllers\API\V1\APIBaseController
 {
 	use HandlesAPIDeviceTokenSubscriptions;
 	use HandlesAPIReturnListOfNotifications;
 	use HandlesAPIMarkReadNotifications;
+	use ValidatesDeviceHeaders;
 
 	/**
 	 * @var PushNotificationsRepository
