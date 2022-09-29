@@ -19,12 +19,15 @@ This package allows you to:
 
 ## Version Compatibility
 
-| Laravel Version   | Package Version   | Branch           |
-| ----------------- | ----------------- |------------------|
-| v8                | 2.x               | master           |
-| v7                | 1.x               | version/v1.x     |
-| v6                | 0.2.x             |                  |
-| v5.x              | 0.1.x             |                  |
+| Laravel Version | Package Version | Branch       |
+|-----------------|-----------------|--------------|
+| v9              | 3.x             | master       |
+| v8              | 2.x             | 2.x          |
+| v7              | 1.x             | version/v1.x |
+| v6              | 0.2.x           |              |
+| v5.x            | 0.1.x           |              |
+
+
 
 
 ### Send Push Notifications
