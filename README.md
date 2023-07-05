@@ -21,8 +21,8 @@ This package allows you to:
 
 | Laravel Version | Package Version | Branch       |
 |-----------------|-----------------|--------------|
-| v10             | 4.x             | master       |
-| v9              | 3.x             | master       |
+| v10             | 4.x             | 4.x          |
+| v9              | 3.x             | 3.x          |
 | v8              | 2.x             | 2.x          |
 | v7              | 1.x             | version/v1.x |
 | v6              | 0.2.x           |              |
