@@ -5,6 +5,7 @@
 
 | Laravel Version | Package Version | Branch       |
 |-----------------|-----------------|--------------|
+| v10             | 4.x             | master       | 
 | v9              | 3.x             | master       |
 | v8              | 2.x             | 2.x          |
 | v7              | 1.x             | version/v1.x |
@@ -15,6 +16,9 @@
 ## v3.0.0
 - PHP 8 support
 - Added support for Laravel 9
+  
+## v4.0.0
+- Added support for Laravel 10
 
 ## v1.1
 
