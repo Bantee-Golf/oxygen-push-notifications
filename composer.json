@@ -5,27 +5,27 @@
     "repositories": [
         {
             "type":"vcs",
-            "url":"git@bitbucket.org:elegantmedia/formation.git"
+            "url":"git@github.com:Bantee-Golf/formation.git"
         },
         {
             "type":"vcs",
-            "url":"git@bitbucket.org:elegantmedia/quickdata-laravel.git"
+            "url":"git@github.com:Bantee-Golf/quickdata-laravel.git"
         },
         {
             "type": "vcs",
-            "url": "git@bitbucket.org:elegantmedia/laravel-helpers.git"
+            "url": "git@github.com:Bantee-Golf/laravel-helpers.git"
         },
         {
             "type": "vcs",
-            "url": "git@bitbucket.org:elegantmedia/php-helpers.git"
+            "url": "git@github.com:Bantee-Golf/php-helpers.git"
         },
         {
             "type": "vcs",
-            "url": "git@bitbucket.org:elegantmedia/devices-laravel.git"
+            "url": "git@github.com:Bantee-Golf/devices-laravel.git"
         },
         {
             "type":"vcs",
-            "url":"git@bitbucket.org:elegantmedia/lotus.git"
+            "url":"git@github.com:Bantee-Golf/lotus.git"
         }
     ],
     "require": {
