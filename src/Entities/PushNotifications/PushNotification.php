@@ -70,10 +70,6 @@ class PushNotification extends Model implements PushNotificationInterface
 		'read_at',
 	];
 
-    protected $casts = [
-        'scheduled_at' => 'datetime',
-    ];
-
 	protected $manyToManyRelations = [];
 
 	/**

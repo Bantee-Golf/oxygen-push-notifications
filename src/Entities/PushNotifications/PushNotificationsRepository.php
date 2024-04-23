@@ -80,7 +80,7 @@ class PushNotificationsRepository extends BaseRepository
 	}
 
 
-	protected function beforeSavingModel(Request $request, $entity)
+	protected function beforeSavingModel(Request $request, Model $entity)
 	{
 		$scheduledAtTime = now();
 		if ($request->filled('scheduled_at_string')) {
